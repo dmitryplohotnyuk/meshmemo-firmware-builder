@@ -1,4 +1,4 @@
-"""Compile prepared ESP32 firmware without opening or flashing a device."""
+"""Compile prepared firmware without opening or flashing a device."""
 
 from contextlib import contextmanager
 import json
@@ -87,7 +87,8 @@ def build(workspace: Path, runtime: Path, output: Path, jobs=4) -> Path:
         raise BuilderError("Jobs must be positive")
     state = read_prepared(workspace)
     plan = state["plan"]
-    if os.name == "nt" and plan["profile"] == "meshmemo" and not plan["windows_workaround"]:
+    if (os.name == "nt" and plan["profile"] == "meshmemo" and
+            plan["hardware"]["architecture"] == "esp32-s3" and not plan["windows_workaround"]):
         raise BuilderError("Prepare with Windows workaround before compiling on Windows")
     if output.exists():
         raise BuilderError("Output directory already exists; choose a new directory")
@@ -123,29 +124,47 @@ def build(workspace: Path, runtime: Path, output: Path, jobs=4) -> Path:
                 raise BuilderError(f"Could not record resolved build dependencies: {inventory.stderr[-2000:]}")
         verify_runtime(plan, runtime)
         build_dir = firmware / ".pio/build" / plan["hardware"]["environment"]
-        candidates = [p for p in build_dir.glob(f"firmware-{plan['board']}-*.bin")
-                      if not p.name.endswith(".factory.bin")]
+        nrf = plan["hardware"]["architecture"] == "nrf52840"
+        extension = "uf2" if nrf else "bin"
+        candidates = [p for p in build_dir.glob(f"firmware-{plan['hardware']['environment']}-*.{extension}")
+                      if not p.name.endswith(f".factory.{extension}")]
         if len(candidates) != 1:
             raise BuilderError("Build did not produce exactly one application image")
         image = candidates[0]
-        partition = app_partition(build_dir / "partitions.bin")
         size = image.stat().st_size
-        if size == 0 or size > partition["size"]:
-            raise BuilderError(f"Application size {size} does not fit the generated partition {partition['size']}")
+        if nrf:
+            from .uf2 import application_info
+            region = plan["hardware"]["application"]
+            info = application_info(image.read_bytes(), region)
+            if plan["profile"] == "meshmemo":
+                raw = image.read_bytes()
+                payload = b"".join(raw[i + 32:i + 288] for i in range(0, len(raw), 512))
+                if bytes.fromhex(plan["build_id"]) not in payload:
+                    raise BuilderError("UF2 application does not contain the expected MeshMemo build ID")
+            partition = {"name": "application", "offset": region["offset"], "size": region["size"]}
+            used = info["span_bytes"]
+            report["uf2"] = info
+        else:
+            partition = app_partition(build_dir / "partitions.bin")
+            used = size
+        if used == 0 or used > partition["size"]:
+            raise BuilderError(f"Application size {used} does not fit the application region {partition['size']}")
         output.mkdir(parents=True, exist_ok=False)
         shutil.copyfile(image, output / image.name)
         report.update({
-            "status": "built", "artifact": image.name, "artifact_kind": "application-only",
+            "status": "built", "artifact": image.name, "artifact_kind": "application-uf2" if nrf else "application-only",
             "meshmemo_enabled": plan["profile"] == "meshmemo",
             "build_id_embedded": plan["profile"] == "meshmemo",
             "sha256": sha256(image), "size_bytes": size, "build_partition": partition,
-            "remaining_partition_bytes": partition["size"] - size,
+            "remaining_partition_bytes": partition["size"] - used,
             "platformio_version": plan["platformio_version"],
             "dependency_lock": plan["dependency_lock"], "offline_build": True,
             "runtime_receipt_sha256": sha256(runtime / "runtime.json"),
-            "device_partition_check_required": True,
+            "device_partition_check_required": not nrf,
             "hardware_validation": {"usb": "not-run", "radio": "not-run"},
         })
+        if nrf:
+            report["bootloader_compatibility_check_required"] = True
         (output / "dependencies.txt").write_text(inventory.stdout, encoding="utf-8")
         shutil.copyfile(log_path, output / "build.log")
         shutil.copyfile(workspace / "prepare.json", output / "prepare.json")

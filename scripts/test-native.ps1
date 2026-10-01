@@ -2,7 +2,8 @@ param(
     [string]$TBeamWorkspace = '.work/portable-tbeam',
     [string]$HeltecWorkspace = '.work/portable-heltec',
     [string]$OutputDirectory = '.work/native-portable',
-    [string[]]$AdditionalWorkspaces = @()
+    [string[]]$AdditionalWorkspaces = @(),
+    [string]$NrfCryptoDirectory = ''
 )
 
 # Run from a Visual Studio Developer PowerShell with cl.exe on PATH.
@@ -29,7 +30,7 @@ try {
             'usb-uart-console' { 2 }
             default { throw "Unsupported native transport: $($hardware.transport)" }
         }
-        $boards += @{ Name = $prepared.plan.board; Workspace = $extra; Board = $prepared.plan.board;
+        $boards += @{ Name = $prepared.plan.board; Workspace = $extra; Board = $prepared.plan.board; Architecture = $hardware.architecture;
                       Model = [int]$hardware.hardware_model; Transport = $transport }
     }
     $harnesses = @()
@@ -43,7 +44,9 @@ try {
         $output = Join-Path $outputRoot $board.Name
         New-Item -ItemType Directory -Path $output -Force | Out-Null
         $configuration = "#pragma once`n#define HW_VENDOR $($board.Model)`n#define MESHMEMO_LOCAL_SERIAL $($board.Transport)`n"
-        if ($board.Transport -eq 1) { $configuration += "#define ARDUINO_USB_CDC_ON_BOOT 1`n" }
+        if ($board.Architecture -eq 'nrf52840') {
+            $configuration += "#define ARCH_NRF52`n#define NRF52840_XXAA`n#define USE_TINYUSB`n"
+        } elseif ($board.Transport -eq 1) { $configuration += "#define ARDUINO_USB_CDC_ON_BOOT 1`n" }
         Set-Content -LiteralPath (Join-Path $output 'configuration.h') -Value $configuration -Encoding ascii
         $mesh = Join-Path $workspace 'firmware/src/mesh'
         & cl.exe /nologo /std:c++17 /EHsc /W4 "/I$output" "/I$mesh" `
@@ -70,8 +73,33 @@ try {
             tests/native/transport_policy.cpp "/Fe:$policy/case$index.exe" "/Fo:$policy/"
         if ($LASTEXITCODE -ne 0) { throw "Transport policy compilation failed: $index" }
     }
+    $nrfCases = @(
+        'EXPECT_ALLOWED=1 MESHMEMO_LOCAL_SERIAL=1 ARCH_NRF52 NRF52840_XXAA USE_TINYUSB',
+        'EXPECT_ALLOWED=0 MESHMEMO_LOCAL_SERIAL=1 ARCH_NRF52 NRF52840_XXAA',
+        'EXPECT_ALLOWED=0 MESHMEMO_LOCAL_SERIAL=1 ARCH_NRF52 USE_TINYUSB',
+        'EXPECT_ALLOWED=0 MESHMEMO_LOCAL_SERIAL=1 NRF52840_XXAA USE_TINYUSB',
+        'EXPECT_ALLOWED=0 MESHMEMO_LOCAL_SERIAL=2 ARCH_NRF52 NRF52840_XXAA USE_TINYUSB',
+        'EXPECT_ALLOWED=0 MESHMEMO_LOCAL_SERIAL=1 ARCH_NRF52 NRF52840_XXAA USE_TINYUSB USER_DEBUG_PORT=1',
+        'EXPECT_ALLOWED=0 MESHMEMO_LOCAL_SERIAL=1 ARCH_NRF52 NRF52840_XXAA USE_TINYUSB RP2040_SLOW_CLOCK=1'
+    )
+    for ($index = 0; $index -lt $nrfCases.Count; $index++) {
+        $definitions = @($nrfCases[$index].Split(' ') | ForEach-Object { "/D$_" })
+        & cl.exe /nologo /std:c++17 /EHsc /W4 /Ipayloads/nrf52840 @definitions `
+            tests/native/transport_policy.cpp "/Fe:$policy/nrf$index.exe" "/Fo:$policy/"
+        if ($LASTEXITCODE -ne 0) { throw "nRF52840 transport policy compilation failed: $index" }
+    }
     $harnesses | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $outputRoot 'harnesses.json') -Encoding utf8
-    Write-Output "Compiled $($boards.Count) bridge harnesses and seven transport policies in $outputRoot"
+    if ($NrfCryptoDirectory) {
+        $crypto = [IO.Path]::GetFullPath($NrfCryptoDirectory)
+        & cl.exe /nologo /std:c++17 /EHsc /W4 /DHOST_BUILD /DARCH_NRF52 /DNRF52840_XXAA `
+            /Ipayloads/nrf52840 /Itests/native/host /FIcrypto_msvc.h "/I$crypto" tests/native/sha256_nrf.cpp `
+            (Join-Path $crypto 'SHA256.cpp') (Join-Path $crypto 'Hash.cpp') (Join-Path $crypto 'Crypto.cpp') `
+            "/Fe:$outputRoot/sha256.exe" "/Fo:$outputRoot/"
+        if ($LASTEXITCODE -ne 0) { throw 'nRF52840 SHA-256 harness compilation failed' }
+        & (Join-Path $outputRoot 'sha256.exe')
+        if ($LASTEXITCODE -ne 0) { throw 'nRF52840 SHA-256 vectors failed' }
+    }
+    Write-Output "Compiled $($boards.Count) bridge harnesses and fourteen transport policies in $outputRoot"
 } finally {
     Pop-Location
 }

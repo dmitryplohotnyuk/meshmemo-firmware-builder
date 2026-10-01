@@ -206,6 +206,57 @@
         "radio": "not-tested-with-builder"
       },
       "windows_lto": "enabled"
+    },
+    "faketec-v4": {
+      "name": "Faketec V4 (nRF52840 / ProMicro DIY)",
+      "environment": "nrf52_promicro_diy_tcxo",
+      "hardware_model": 63,
+      "architecture": "nrf52840",
+      "upstreams": [
+        "2.7.26"
+      ],
+      "supported_profiles": [
+        "meshmemo",
+        "patches-only"
+      ],
+      "config": "variants/nrf52840/diy/nrf52_promicro_diy_tcxo/platformio.ini",
+      "config_section": "[env:nrf52_promicro_diy_tcxo]",
+      "flags_anchor": "  -I variants/nrf52840/diy/nrf52_promicro_diy_tcxo",
+      "transport": "native-usb-cdc",
+      "display": "optional-ssd1306",
+      "supported_options": [
+        "ua22",
+        "cyrillic",
+        "display-timeout"
+      ],
+      "application": {
+        "offset": 155648,
+        "size": 815104,
+        "uf2_family": 2913282112
+      },
+      "status": {
+        "prepare": "validated-option-matrix-2026-10-01",
+        "build": "meshmemo-all-options-and-patches-only-uf2-offline-2026-10-01",
+        "usb": "not-tested-with-builder",
+        "radio": "not-tested-with-builder"
+      },
+      "build_flags": [
+        "MESHMEMO_LOCAL_SERIAL=1"
+      ],
+      "copy_overrides": {
+        "src/mesh/UsbSfTransport.h": {
+          "path": "payloads/nrf52840/UsbSfTransport.h",
+          "sha256": "8191055cea94bfc5f8fccb895e8e0f054e86df4fb889a7fad0223eb6446dd035",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfTransport.h"
+        },
+        "src/mesh/UsbSfSha256.h": {
+          "path": "payloads/nrf52840/UsbSfSha256.h",
+          "sha256": "f6d6734cccc3fb971517eb20e15efcda4b5481c60618692e6ef0b0059a51ad8e",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfSha256.h"
+        }
+      }
     }
   },
   "profiles": {
@@ -295,6 +346,10 @@
     "tlora-t3s3-v1:2.7.26": {
       "path": "registry/locks/tlora-t3s3-v1-2.7.26-windows-amd64.json",
       "sha256": "85b860bc7859165830ba513abcb40a1e2f78ba999511af93489e1e8571a98862"
+    },
+    "faketec-v4:2.7.26": {
+      "path": "registry/locks/faketec-v4-2.7.26-windows-amd64.json",
+      "sha256": "226e6104094cee01edd7ad2362aa5deae5424b7510b24d80855cc1f504e4f745"
     }
   },
   "release_bases": {

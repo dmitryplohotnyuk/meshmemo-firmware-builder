@@ -50,6 +50,10 @@ REPLAY, ABORT, CONTROL; без ENCRYPTED_REPLY он блокирует server-ch
 `hardware_model == 12` для USF2 нет. Для старых USF1 1/2 и 1/3 прежняя проверка
 модели сохранена; их операции определяются по проверенной revision.
 
+Faketec V4 использует hardware model 63 и transport 1 (TinyUSB CDC на nRF52840).
+Формат и лимиты USF2 остаются прежними; SHA-256 контекста вычисляется через
+rweather/Crypto. Перенаправление консоли через USER_DEBUG_PORT запрещает мост.
+
 Build ID вычисляется из канонического JSON плана (sort_keys, compact separators),
 включая плату, исходники, патчи, опции, версию builder и dependency lock.
 Информационные hardware status исключены. Хеш записывается в `plan.build_id`
@@ -66,7 +70,7 @@ Build ID вычисляется из канонического JSON плана 
 
 Hook по умолчанию остаётся запрещён в PhoneAPI. Его разрешает только SerialConsole
 после обычной protobuf configuration session. Выбор транспорта явный для платы:
-T-Beam S3 Core, Tracker V1.1 и T-LoRa T3-S3 — native USB CDC;
+T-Beam S3 Core, Tracker V1.1, T-LoRa T3-S3 и Faketec V4 — native USB CDC;
 Heltec V3 и Wireless Stick Lite V3 — console через USB–UART.
 Наличие CP2102 у V3 подтверждено [спецификацией производителя](https://heltec.org/project/wifi-lora-32-v3/);
 этот профиль не относится к Heltec V4.
@@ -79,6 +83,6 @@ USER_DEBUG_PORT и RP2040_SLOW_CLOCK не разрешаются этим про
 Host-encrypted replies требуют доверенного локального сервера: firmware не
 проверяет plaintext шифротекста. Capabilities не включают replay автоматически.
 
-SHA-256 вынесен в `UsbSfSha256.h`; текущий проверяемый backend — mbedTLS для
-ESP32. Другие архитектуры получают явную ошибку компиляции до добавления и
+SHA-256 вынесен в `UsbSfSha256.h`: mbedTLS для ESP32, rweather/Crypto для
+nRF52840. Другие архитектуры получают явную ошибку компиляции до добавления и
 проверки их backend. Наличие общего wire contract не означает поддержку всех MCU.

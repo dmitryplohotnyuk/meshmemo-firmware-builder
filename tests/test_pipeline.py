@@ -133,14 +133,14 @@ def materialize(tmp_path, files):
     return firmware
 
 
-@pytest.mark.parametrize("board,enabled", [
-    (board, bits)
+@pytest.mark.parametrize("board,enabled,windows", [
+    (board, bits, windows)
     for board, hardware in load_catalog()["boards"].items()
     for bits in itertools.product((False, True), repeat=3)
+    for windows in ([False, True] if hardware["architecture"] == "esp32-s3" else [False])
     if all(not active or name in hardware.get("supported_options", load_catalog()["options"])
            for name, active in zip(("ua22", "cyrillic", "display-timeout"), bits))
 ])
-@pytest.mark.parametrize("windows", [False, True])
 def test_real_upstream_option_matrix(tmp_path, pinned_files, enabled, windows, board):
     options = [key for key, active in zip(("ua22", "cyrillic", "display-timeout"), enabled) if active]
     plan = resolve_plan(board=board, options=options, windows_workaround=windows)

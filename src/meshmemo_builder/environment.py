@@ -28,6 +28,7 @@ def load_lock(plan):
             raise BuilderError("Release inputs cannot reuse this dependency lock")
         firmware_commit = load_catalog()["upstreams"][plan["release"]["base"]]["firmware"]["commit"]
     if (lock["schema_version"] != 1 or lock["board"] != plan["board"]
+            or lock.get("environment", lock["board"]) != plan["hardware"]["environment"]
             or lock["firmware_commit"] != firmware_commit
             or lock["platformio_version"] != plan["platformio_version"]):
         raise BuilderError("Dependency lock does not match the prepared firmware")
@@ -38,6 +39,9 @@ def artifacts(lock):
     for item in lock["packages"]:
         archive = item["archive"]
         yield archive, "archives/" + archive["sha256"] + archive["suffix"]
+        for module in item.get("submodules", []):
+            archive = module["archive"]
+            yield archive, "archives/" + archive["sha256"] + archive["suffix"]
     for item in lock["python"]:
         yield item, "wheels/" + item["filename"]
 

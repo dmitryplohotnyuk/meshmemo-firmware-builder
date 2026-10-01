@@ -9,6 +9,14 @@ Wireless Stick Lite V3 и T-LoRa T3-S3 используют тот же набо
 Все три пользовательские опции используют один набор зависимостей; UA22,
 кириллица и display timeout остаются выключенными по умолчанию.
 
+Faketec V4 имеет отдельный nRF52840 lock: 69 пакетов PlatformIO, два архива
+подмодулей framework и 36 Python wheels. `board=faketec-v4` отделён от имени
+environment `nrf52_promicro_diy_tcxo`; библиотеки устанавливаются в каталог
+environment. Framework Adafruit nRF52 и TinyUSB/nRFCrypto закреплены полными
+Git SHA и контрольными суммами архивов. Плавающая upstream-ветка не скачивается
+при bootstrap или build. Из GitHub-архива framework при установке убирается
+только верхняя папка с длинным именем; содержимое файлов сохраняется.
+
 `registry/locks/tbeam-s3-core-2.7.26-windows-amd64.json` содержит:
 
 - ESP32 platform и семь инструментальных пакетов, включая framework и SCons;

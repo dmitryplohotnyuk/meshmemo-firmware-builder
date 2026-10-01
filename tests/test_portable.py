@@ -15,7 +15,7 @@ def test_identity_distinguishes_boards_and_all_optional_combinations():
             plan = resolve_plan(board=board, options=options)
             assert plan["build_id"] == resolve_plan(board=board, options=reversed(options))["build_id"]
             identities.add(plan["build_id"])
-    assert len(identities) == 34
+    assert len(identities) == 42
 
 
 def test_heltec_has_its_own_model_transport_and_dependency_lock():

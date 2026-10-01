@@ -1,7 +1,7 @@
 # MeshMemo Firmware Builder
 
 CLI для подготовки и сборки Meshtastic с MeshMemo или только выбранными дополнительными патчами.
-**Пять профилей ESP32-S3, Meshtastic 2.7.26**, протокол USF2, профиль 1/4.
+**Пять плат ESP32-S3 и Faketec V4 (nRF52840), Meshtastic 2.7.26**, протокол USF2, профиль 1/4.
 Для профиля MeshMemo требуется [MeshMemo server](https://github.com/dmitryplohotnyuk/meshmemo)
 **0.1.0a8+**; сервер обновляется первым. Другие платы пока отклоняются.
 Свежие релизы можно получать и проверять через `prepare-release`; неизвестная
@@ -16,11 +16,19 @@ CLI для подготовки и сборки Meshtastic с MeshMemo или т
 | Heltec Wireless Stick Lite V3 / `heltec-wsl-v3` | USB–UART | UA22 |
 | Heltec Wireless Tracker **V1.1** / `heltec-wireless-tracker` | Native CDC | UA22, кириллица, таймер экрана |
 | LILYGO T-LoRa T3-S3 / `tlora-t3s3-v1` | Native CDC | UA22, кириллица, таймер экрана |
+| Faketec V4 / `faketec-v4` | Native CDC (TinyUSB) | UA22, кириллица, таймер внешнего OLED |
 
 Профиль Tracker относится именно к V1.1; V1.0 и V2 не включены. Stick Lite V3
 рассчитан на плату без штатного экрана: экранные флаги отклоняются, в мастере
 они не предлагаются. Внешние дисплеи для этого профиля пока не заявлены.
 У T-LoRa конкретный радиомодуль и диапазон нужно проверять отдельно.
+
+Faketec V4 поддерживает полный `meshmemo` и независимый `patches-only`.
+Используется официальный target `nrf52_promicro_diy_tcxo`, модель 63:
+в закреплённой версии он автоматически пробует TCXO и XTAL. Результат сборки —
+**UF2 приложения**; загрузчик и SoftDevice в него не входят. Кириллица и таймер
+предназначены для подключённого SSD1306. Подробности и ограничения:
+[Faketec V4](docs/faketec-v4.md).
 
 Статусы подготовки, сборки, USB и радио доступны через `list-boards`.
 Аппаратно проверены USB и экран T-Beam; аппаратные проверки остальных плат и
@@ -220,6 +228,7 @@ patches/platform/          USB polling и Windows workaround
 patches/optional/          UA22, OLED Cyrillic, display timeout
 payloads/replay/           radio adapter и encoder
 payloads/portable/         transport policy и ESP32 SHA-256 backend
+payloads/nrf52840/         TinyUSB transport policy и SHA-256 для Faketec V4
 tests/                    модульные, upstream и native проверки
 docs/provenance.json        происхождение и хеши импортированных файлов
 docs/implementation-plan.md план и текущий охват
@@ -258,7 +267,7 @@ Firmware сообщает реальную модель и build ID. Серве�
 привязка к модели 12 сохранена только для старых USF1 1/2–1/3.
 Транспорт каждой платы указан в таблице выше; его соответствие настройкам
 upstream и модели проверяется при компиляции через `static_assert`.
-SHA-256 имеет отдельный ESP32 backend; другие архитектуры ещё не поддержаны.
+SHA-256 имеет отдельные реализации для ESP32 (mbedTLS) и nRF52840 (rweather/Crypto).
 Подробности wire contract: [protocol.md](docs/protocol.md).
 Lock зависимостей реализован для Windows AMD64; Linux lock пока отсутствует.
 Python 3.12.14 и Git устанавливаются отдельно. Lock не фиксирует ОС и не обещает

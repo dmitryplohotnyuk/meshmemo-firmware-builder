@@ -82,6 +82,8 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
         raise BuilderError(f"Unknown board, upstream or profile: {exc.args[0]}") from exc
     if upstream not in hardware["upstreams"]:
         raise BuilderError(f"{board} does not support upstream {upstream}")
+    if profile not in hardware.get("supported_profiles", catalog["profiles"]):
+        raise BuilderError(f"{board} does not support profile {profile}; use --profile patches-only")
     selected = sorted(set(options))
     unknown = set(selected) - catalog["options"].keys()
     if unknown:
@@ -95,7 +97,9 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
     meshmemo = profile == "meshmemo"
     if not meshmemo:
         hardware = {**hardware, "status": {key: "not-tested-patches-only" for key in ("prepare", "build", "usb", "radio")}}
-    windows = (os.name == "nt" and meshmemo) if windows_workaround is None else windows_workaround
+    windows = (os.name == "nt" and meshmemo and hardware["architecture"] == "esp32-s3") if windows_workaround is None else windows_workaround
+    if windows and hardware["architecture"] != "esp32-s3":
+        raise BuilderError("Windows LTO workaround applies only to ESP32-S3; use auto or off for this board")
     patches = list(base["patches"]) if meshmemo else []
     flags = []
     for option in selected:
@@ -113,7 +117,8 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
         "windows_workaround": windows, "hardware": hardware,
         "protocol": selected_profile, "firmware": base["firmware"],
         "protobufs": base["protobufs"], "platformio_version": base["platformio_version"],
-        "patches": patches, "copies": base["copies"] if meshmemo else [], "build_flags": flags,
+        "patches": patches, "copies": [hardware.get("copy_overrides", {}).get(item["destination"], item)
+                                        for item in base["copies"]] if meshmemo else [], "build_flags": flags,
         "dependency_lock": catalog["dependency_locks"].get(f"{board}:{upstream}"),
     }
     verify_assets(plan, root)
@@ -193,13 +198,19 @@ def apply_plan(plan: dict, firmware: Path, root: Path | None = None, patch_progr
     content = config.read_text(encoding="utf-8")
     anchor = plan["hardware"]["flags_anchor"]
     lines = content.splitlines()
-    if lines.count(anchor) != 1:
+    start, end = 0, len(lines)
+    if section := plan["hardware"].get("config_section"):
+        if lines.count(section) != 1:
+            raise BuilderError("Board configuration section does not match")
+        start = lines.index(section) + 1
+        end = next((i for i in range(start, len(lines)) if lines[i].startswith("[")), len(lines))
+    if lines[start:end].count(anchor) != 1:
         raise BuilderError("Board build flag anchor does not match the pinned configuration")
     if not plan["build_flags"]:
         return
     if not all(re.fullmatch(r"[A-Z_0-9]+=[A-Za-z_0-9]+", flag) for flag in plan["build_flags"]):
         raise BuilderError("Invalid build flag in registry")
-    at = lines.index(anchor) + 1
+    at = lines.index(anchor, start, end) + 1
     lines[at:at] = [f"  -D {flag}" for flag in plan["build_flags"]]
     config.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     if plan["profile"] != "meshmemo":

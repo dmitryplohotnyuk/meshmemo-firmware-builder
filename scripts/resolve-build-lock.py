@@ -7,6 +7,8 @@ from importlib import metadata
 import json
 from pathlib import Path
 import platform
+import re
+import subprocess
 import sys
 from urllib.parse import quote
 from urllib.request import Request, urlopen
@@ -24,7 +26,7 @@ def fetch_json(url):
 def resolve_package(record, scratch):
     spec = record["spec"]
     if spec["uri"]:
-        url = spec["uri"]
+        url = record.pop("snapshot_url", spec["uri"])
         if not url.startswith("https://"):
             raise ValueError(f"Non-HTTPS package: {record['name']}")
         path = scratch / (hashlib.sha256(url.encode()).hexdigest() + ".zip")
@@ -48,6 +50,43 @@ def resolve_package(record, scratch):
         record["archive"] = {"url": artifact["download_url"], "sha256": artifact["checksum"]["sha256"],
                              "size": artifact["size"], "suffix": ".tar.gz" if artifact["name"].endswith(".tar.gz") else ".zip"}
     print(f"Resolved {record['type']}: {record['name']} {record['version']}", flush=True)
+    return record
+
+
+def git(path, *args):
+    return subprocess.check_output(["git", "-c", f"safe.directory={path.resolve().as_posix()}",
+                                    "-C", str(path), *args], text=True, encoding="utf-8").strip()
+
+
+def github_snapshot(path):
+    url = git(path, "remote", "get-url", "origin").removesuffix(".git")
+    commit = git(path, "rev-parse", "HEAD")
+    if not re.fullmatch(r"https://github.com/[\w.-]+/[\w.-]+", url) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("Only pinned GitHub snapshots are supported for Git dependencies")
+    return f"{url}/archive/{commit}.zip", commit
+
+
+def git_package(path, record, scratch):
+    record["snapshot_url"], record["source_commit"] = github_snapshot(path)
+    record["submodules"] = []
+    def modules(repository):
+        for line in git(repository, "ls-tree", "-r", "HEAD").splitlines():
+            meta, relative = line.split("\t", 1)
+            mode, kind, commit = meta.split()
+            if mode != "160000":
+                continue
+            child = repository / relative
+            if not (child / ".git").exists():
+                raise ValueError("Git submodule is not initialized")
+            url, actual = github_snapshot(child)
+            if actual != commit:
+                raise ValueError("Submodule commit mismatch")
+            relative = child.relative_to(path).as_posix()
+            snapshot = resolve_package({"type": "submodule", "name": relative, "version": commit,
+                                        "spec": {"uri": url}}, scratch)
+            record["submodules"].append({"path": relative, "commit": commit, "archive": snapshot["archive"]})
+            modules(child)
+    modules(path)
     return record
 
 
@@ -101,15 +140,22 @@ def main():
     if sys.platform != "win32" or platform.machine().upper() != "AMD64":
         parser.error("This lock resolver currently targets Windows AMD64 only")
     args.scratch.mkdir(parents=True, exist_ok=False)
-    paths = [args.reference_core / "platforms/espressif32/.piopm"]
-    paths += [args.reference_core / "packages" / name / ".piopm" for name in (
+    nrf = catalog["boards"][args.board]["architecture"] == "nrf52840"
+    platform_name = "nordicnrf52" if nrf else "espressif32"
+    paths = [args.reference_core / "platforms" / platform_name / ".piopm"]
+    packages = ("framework-arduinoadafruitnrf52", "framework-cmsis", "tool-adafruit-nrfutil",
+                "tool-sreccat", "toolchain-gccarmnoneeabi", "tool-scons") if nrf else (
         "framework-arduinoespressif32", "tool-esptoolpy", "tool-mklittlefs",
-        "tool-openocd-esp32", "toolchain-riscv32-esp", "toolchain-xtensa-esp32s3", "tool-scons")]
+        "tool-openocd-esp32", "toolchain-riscv32-esp", "toolchain-xtensa-esp32s3", "tool-scons")
+    paths += [args.reference_core / "packages" / name / ".piopm" for name in packages]
     paths += sorted(args.reference_libraries.glob("*/.piopm"))
     records = []
     for path in paths:
-        item = json.loads(path.read_text(encoding="utf-8"))
+        metadata_path = path if path.is_file() else path.parent / ".git/.piopm"
+        item = json.loads(metadata_path.read_text(encoding="utf-8"))
         item["directory"] = path.parent.name
+        if (item["spec"].get("uri") or "").startswith("git+"):
+            item = git_package(path.parent, item, args.scratch)
         records.append(item)
     with ThreadPoolExecutor(max_workers=4) as pool:
         packages = list(pool.map(lambda item: resolve_package(item, args.scratch), records))
@@ -118,6 +164,8 @@ def main():
               "system": "windows_amd64", "python_version": platform.python_version(),
               "platformio_version": "6.2.0", "firmware_commit": "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb",
               "board": args.board, "packages": packages, "python": wheels}
+    if catalog["boards"][args.board]["environment"] != args.board:
+        result["environment"] = catalog["boards"][args.board]["environment"]
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"Wrote {len(packages)} source/tool archives and {len(wheels)} Python wheels: {args.output}")

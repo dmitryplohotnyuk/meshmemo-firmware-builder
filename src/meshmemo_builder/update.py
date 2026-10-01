@@ -170,6 +170,8 @@ def inspect_flash_bytes(raw: bytes) -> dict:
 def candidate(manifest: Path, board: str) -> tuple[dict, dict]:
     try:
         report = json.loads(read_binary(manifest, 1024 * 1024))
+        if report.get("plan", {}).get("hardware", {}).get("architecture") == "nrf52840":
+            raise BuilderError("The backup/update planner supports ESP32-S3 only; nRF52840 UF2 is unsupported here")
         if report["status"] != "built" or report["artifact_kind"] != "application-only":
             raise BuilderError("Requires a completed application-only build manifest")
         plan = report["plan"]

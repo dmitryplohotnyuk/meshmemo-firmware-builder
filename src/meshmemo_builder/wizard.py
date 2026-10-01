@@ -68,9 +68,11 @@ class Prompts:
             self.write("Введите число от 1 до 64.")
 
 
-def board_choice(ui):
+def board_choice(ui, profile="meshmemo", architecture=None):
     boards = load_catalog()["boards"]
-    names = list(boards)
+    names = [name for name, board in boards.items()
+             if profile in board.get("supported_profiles", load_catalog()["profiles"])
+             and (architecture is None or board["architecture"] == architecture)]
     return names[ui.choose("Выберите плату", [boards[name]["name"] for name in names])]
 
 
@@ -94,7 +96,7 @@ def execute_steps(ui, steps, execute):
 
 
 def prepare_flow(ui, execute, profile="meshmemo"):
-    board = board_choice(ui)
+    board = board_choice(ui, profile)
     catalog = load_catalog()
     hardware = catalog["boards"][board]
     upstreams = hardware["upstreams"]
@@ -174,7 +176,7 @@ def build_flow(ui, execute):
 
 
 def release_flow(ui, execute, profile="meshmemo"):
-    board = board_choice(ui)
+    board = board_choice(ui, profile)
     channel = ("stable", "preview")[ui.choose("Канал Meshtastic", ["Стабильный", "Предварительный (preview)"], "1")]
     tag = ui.ask("Точный тег релиза или latest для самого свежего в выбранном канале", "latest")
     catalog = load_catalog()
@@ -203,7 +205,7 @@ def release_flow(ui, execute, profile="meshmemo"):
 
 def update_flow(ui):
     from .update import plan_update
-    board = board_choice(ui)
+    board = board_choice(ui, architecture="esp32-s3")
     backup = ui.path("Полная flash-копия (.bin)", "file")
     manifest = ui.path("Manifest готовой сборки (.json)", "file")
     report = plan_update(backup, manifest, board)
