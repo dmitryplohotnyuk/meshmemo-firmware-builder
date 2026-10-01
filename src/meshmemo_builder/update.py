@@ -10,7 +10,7 @@ from pathlib import Path
 import struct
 import zlib
 
-from .pipeline import BuilderError, contained, resolve_plan
+from .pipeline import BuilderError, contained, resolve_saved_plan
 
 SECTOR = 0x1000
 TABLE = 0x8000
@@ -177,7 +177,7 @@ def candidate(manifest: Path, board: str) -> tuple[dict, dict]:
             raise BuilderError("Selected board does not match the build manifest")
         if not isinstance(plan["options"], list) or type(plan["windows_workaround"]) is not bool:
             raise BuilderError("Invalid build options")
-        expected = resolve_plan(board, plan["upstream"], plan["profile"], plan["options"], plan["windows_workaround"])
+        expected = resolve_saved_plan(plan)
         def inputs(value):
             return {**value, "hardware": {k: v for k, v in value["hardware"].items() if k != "status"}}
         if inputs(plan) != inputs(expected):
@@ -201,6 +201,8 @@ def plan_update(backup: Path, manifest: Path, board: str) -> dict:
     inspection = inspect_flash(backup)
     app = inspection["selected_application"]
     blockers = list(inspection["blockers"])
+    if "release" in report["plan"]:
+        blockers.append("Experimental release has not been promoted to the validated registry; live validation is required")
     erased = ((new_image["size_bytes"] + SECTOR - 1) // SECTOR) * SECTOR
     if app and erased > app["size"]:
         blockers.append("Application/erase range exceeds the selected partition in the backup")

@@ -8,7 +8,7 @@ import shutil
 import struct
 import subprocess
 
-from .pipeline import BuilderError, contained, data_root, resolve_plan, run, sha256, source_hashes, write_json
+from .pipeline import BuilderError, contained, data_root, resolve_saved_plan, run, sha256, source_hashes, write_json
 from .environment import offline_environment, verify_runtime
 
 
@@ -56,8 +56,7 @@ def read_prepared(workspace: Path) -> dict:
         if state["status"] != "prepared":
             raise BuilderError("Workspace preparation did not complete")
         plan = state["plan"]
-        expected = resolve_plan(plan["board"], plan["upstream"], plan["profile"],
-                                plan["options"], plan["windows_workaround"])
+        expected = resolve_saved_plan(plan)
         def inputs(value):
             # Status and the old filename hint do not affect source preparation.
             return {**value, "hardware": {key: item for key, item in value["hardware"].items()
@@ -65,6 +64,9 @@ def read_prepared(workspace: Path) -> dict:
 
         if inputs(plan) != inputs(expected):
             raise BuilderError("Prepared plan differs from the installed registry; prepare a new workspace")
+        if "release" in plan:
+            from .releases import validate_sources
+            validate_sources(plan, workspace / "firmware")
         if not state["source_sha256"]:
             raise BuilderError("Prepared workspace has no source hashes")
         for relative, digest in state["source_sha256"].items():

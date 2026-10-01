@@ -60,13 +60,27 @@ def test_screenless_board_does_not_ask_for_display_options(tmp_path):
     assert "Включить экранную кириллицу" not in output and "Включить гашение" not in output
 
 
+def test_fresh_release_wizard_preserves_explicit_channel_and_optional_flags(tmp_path):
+    code, output, calls = session(["6", "3", "2", "", "", str(tmp_path / "release"), "да"])
+    assert code == 0 and len(calls) == 1
+    assert calls[0][:3] == ["prepare-release", "--board", "heltec-wsl-v3"]
+    assert calls[0][3:7] == ["--release", "latest", "--channel", "preview"]
+    assert not any(flag in calls[0] for flag in ("--ua22", "--cyrillic", "--display-timeout"))
+    assert "экспериментальной" in output
+
+
+def test_fresh_release_wizard_cancel_does_not_download(tmp_path):
+    code, _, calls = session(["6", "3", "", "", "", str(tmp_path / "release"), ""])
+    assert code == 0 and not calls
+
+
 @pytest.mark.parametrize("answers", [["q"], ["1", "q"], [], ["1", "1", ""]])
 def test_exit_and_eof_stop_without_side_effects(answers):
     assert session(answers)[0::2] == (130, [])
 
 
 def test_invalid_answers_are_reprompted():
-    code, output, calls = session(["", "-1", "99999999999999999999999999999999999999", "foo", "6"])
+    code, output, calls = session(["", "-1", "99999999999999999999999999999999999999", "foo", "7"])
     assert code == 0 and not calls
     assert output.count("Введите номер") == 4
 

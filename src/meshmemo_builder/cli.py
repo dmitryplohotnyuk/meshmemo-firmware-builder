@@ -18,6 +18,9 @@ def parser() -> argparse.ArgumentParser:
     commands.add_parser("list-boards", help="List registered boards and validation status")
     commands.add_parser("list-options", help="List independent optional firmware patches")
     commands.add_parser("doctor", help="Check local Python and Git; does not install tools")
+    releases = commands.add_parser("list-releases", help="Discover official Meshtastic releases online")
+    releases.add_argument("--channel", choices=("stable", "preview", "all"), default="stable")
+    releases.add_argument("--limit", type=int, default=10)
     recovery = commands.add_parser("prepare-recovery", help="Extract a self-contained recovery package from a backup; never flash")
     recovery.add_argument("--backup", type=Path, required=True)
     recovery.add_argument("--destination", type=Path, required=True, help="New directory in an existing parent")
@@ -41,17 +44,22 @@ def parser() -> argparse.ArgumentParser:
         sub.add_argument("--cache", type=Path, required=True)
         if name == "bootstrap":
             sub.add_argument("--destination", type=Path, required=True)
-    for command in ("inspect", "prepare"):
+    for command in ("inspect", "prepare", "prepare-release"):
         sub = commands.add_parser(command)
         sub.add_argument("--board", default="tbeam-s3-core")
-        sub.add_argument("--upstream", default="2.7.26")
+        if command == "prepare-release":
+            sub.add_argument("--release", default="latest", help="latest or an exact official release tag")
+            sub.add_argument("--channel", choices=("stable", "preview"), default="stable")
+            sub.add_argument("--base", default="2.7.26", help="Installed patch baseline")
+        else:
+            sub.add_argument("--upstream", default="2.7.26")
         sub.add_argument("--profile", default="meshmemo")
         sub.add_argument("--ua22", action="store_true", help="Opt in to custom UA_433 22 dBm ceiling")
         sub.add_argument("--cyrillic", action="store_true", help="Enable OLED_UA and glyph correction")
         sub.add_argument("--display-timeout", action="store_true", help="Allow display timeout during USB sessions")
         sub.add_argument("--windows-workaround", choices=("auto", "on", "off"), default="auto",
                          help="Windows build workaround, independent of firmware options")
-        if command == "prepare":
+        if command in ("prepare", "prepare-release"):
             sub.add_argument("--destination", type=Path, required=True, help="New workspace directory")
             sub.add_argument("--firmware-source", help="Optional local Git repository or HTTPS URL")
             sub.add_argument("--protobuf-source", help="Optional local Git repository or HTTPS URL")
@@ -75,6 +83,9 @@ def main(argv=None) -> int:
                 raise BuilderError("Git is not available on PATH")
             print(run(["git", "--version"]).strip())
             print("Preparation ready. Locked Windows builds require Python 3.12.14; use fetch-dependencies and bootstrap.")
+        elif args.command == "list-releases":
+            from .releases import list_releases
+            print(json.dumps(list_releases(args.channel, args.limit), indent=2, ensure_ascii=False))
         elif args.command in ("fetch-dependencies", "bootstrap"):
             from .build import read_prepared
             from .environment import bootstrap, fetch, load_lock
@@ -109,6 +120,19 @@ def main(argv=None) -> int:
             options = [name for name in ("ua22", "cyrillic", "display-timeout")
                        if getattr(args, name.replace("-", "_"))]
             windows = {"auto": None, "on": True, "off": False}[args.windows_workaround]
+            if args.command == "prepare-release":
+                from .releases import prepare_release
+                if args.profile != "meshmemo":
+                    raise BuilderError("Unknown profile")
+                path = prepare_release(args.destination, args.board, args.release, args.channel, options,
+                                       windows, args.base, args.firmware_source, args.protobuf_source)
+                print(f"Release sources patched. Manifest: {path}. Compatibility report: {path.parent / 'release.json'}")
+                report = json.loads((path.parent / "release.json").read_text(encoding="utf-8"))
+                if not report["build_ready"]:
+                    print("Sources prepared; compilation blocked until new dependencies are locked and validated.")
+                    return 2
+                print("Dependency lock compatible. Compilation and hardware validation have not been performed.")
+                return 0
             plan = resolve_plan(args.board, args.upstream, args.profile, options, windows)
             if args.command == "inspect":
                 print(json.dumps(plan, indent=2, ensure_ascii=False))

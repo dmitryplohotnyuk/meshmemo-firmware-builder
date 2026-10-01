@@ -292,5 +292,11 @@
       "path": "registry/locks/tlora-t3s3-v1-2.7.26-windows-amd64.json",
       "sha256": "85b860bc7859165830ba513abcb40a1e2f78ba999511af93489e1e8571a98862"
     }
+  },
+  "release_bases": {
+    "2.7.26": {
+      "path": "registry/release-bases/2.7.26.json",
+      "sha256": "69700e2c827ed4293ecc62d36df6d6fe68a713ccbb1b693e01065b41ec00aff9"
+    }
   }
 }

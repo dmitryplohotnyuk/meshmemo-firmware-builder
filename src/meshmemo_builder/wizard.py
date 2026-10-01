@@ -171,6 +171,32 @@ def build_flow(ui, execute):
                                               "--output", str(output), "--jobs", jobs])], execute)
 
 
+def release_flow(ui, execute):
+    board = board_choice(ui)
+    channel = ("stable", "preview")[ui.choose("Канал Meshtastic", ["Стабильный", "Предварительный (preview)"], "1")]
+    tag = ui.ask("Точный тег релиза или latest для самого свежего в выбранном канале", "latest")
+    catalog = load_catalog()
+    available = catalog["boards"][board].get("supported_options", catalog["options"])
+    options = []
+    for name, label in (("ua22", "Включить UA22"), ("cyrillic", "Включить экранную кириллицу"),
+                        ("display-timeout", "Включить таймер экрана при USB-подключении")):
+        if name in available and ui.yes(label):
+            options.append(name)
+    workspace = ui.path("Новая папка исходников релиза", "new", ".work/new-release")
+    ui.write(f"\nПлата: {board}. Канал: {channel}. Релиз: {tag}.")
+    ui.write("Дополнительные опции: " + (", ".join(options) or "выключены"))
+    ui.write("Релиз будет получен из официального репозитория и закреплён по коммиту.")
+    ui.write("Результаты применения патчей и проверки зависимостей сохраняются в release.json.")
+    ui.write("Новая версия считается экспериментальной. Конфликт требует адаптации патча;")
+    ui.write("изменение зависимостей требует нового проверенного окружения для сборки.")
+    if not ui.yes("Скачать и применить патчи"):
+        ui.write("Отменено. Загрузка не запускалась.")
+        return 0
+    return execute_steps(ui, [("Получение и патчинг релиза", ["prepare-release", "--board", board,
+        "--release", tag, "--channel", channel, "--destination", str(workspace)]
+        + [f"--{name}" for name in options])], execute)
+
+
 def update_flow(ui):
     from .update import plan_update
     board = board_choice(ui)
@@ -234,12 +260,14 @@ def run(*, reader=None, writer=None, execute=None):
     ui.write("Мастер подготавливает файлы и сборки; прошивка устройства не выполняется.")
     try:
         task = ui.choose("Выберите действие", ["Подготовить новую прошивку", "Проверить обновление по flash-копии",
-            "Создать пакет восстановления", "Проверить пакет восстановления", "Собрать подготовленные исходники", "Выйти"])
+            "Создать пакет восстановления", "Проверить пакет восстановления", "Собрать подготовленные исходники",
+            "Получить свежий релиз и применить патчи", "Выйти"])
         if task == 0: return prepare_flow(ui, execute)
         if task == 1: return update_flow(ui)
         if task == 2: return recovery_flow(ui)
         if task == 3: return verify_flow(ui)
         if task == 4: return build_flow(ui, execute)
+        if task == 5: return release_flow(ui, execute)
         return 0
     except (Cancelled, EOFError, KeyboardInterrupt):
         ui.write("\nМастер остановлен. Завершённые результаты и журналы сохранены; новые этапы не запускаются.")

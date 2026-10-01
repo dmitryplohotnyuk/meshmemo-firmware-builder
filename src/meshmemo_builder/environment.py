@@ -9,19 +9,26 @@ import subprocess
 import sys
 from urllib.request import Request, urlopen
 
-from .pipeline import BuilderError, contained, data_root, sha256, write_json
+from .pipeline import BuilderError, contained, data_root, load_catalog, sha256, write_json
 
 
 def load_lock(plan):
     item = plan.get("dependency_lock")
     if not item:
-        raise BuilderError("No dependency lock for this plan; prepare a new workspace")
+        raise BuilderError("No compatible dependency lock for this release; a maintainer must resolve and validate its new dependencies")
     path = contained(data_root(), item["path"])
     if sha256(path) != item["sha256"]:
         raise BuilderError("Dependency lock checksum mismatch")
     lock = json.loads(path.read_text(encoding="utf-8"))
+    firmware_commit = plan["firmware"]["commit"]
+    if "release" in plan:
+        from .pipeline import resolve_saved_plan
+        expected = resolve_saved_plan(plan)
+        if expected["dependency_lock"] != item:
+            raise BuilderError("Release inputs cannot reuse this dependency lock")
+        firmware_commit = load_catalog()["upstreams"][plan["release"]["base"]]["firmware"]["commit"]
     if (lock["schema_version"] != 1 or lock["board"] != plan["board"]
-            or lock["firmware_commit"] != plan["firmware"]["commit"]
+            or lock["firmware_commit"] != firmware_commit
             or lock["platformio_version"] != plan["platformio_version"]):
         raise BuilderError("Dependency lock does not match the prepared firmware")
     return lock

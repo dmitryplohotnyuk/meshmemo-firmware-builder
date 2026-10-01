@@ -113,9 +113,23 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
         "dependency_lock": catalog["dependency_locks"].get(f"{board}:{upstream}"),
     }
     verify_assets(plan, root)
-    identity = {**plan, "hardware": {key: value for key, value in hardware.items() if key != "status"}}
-    plan["build_id"] = hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    plan["build_id"] = plan_identity(plan)
     return plan
+
+
+def plan_identity(plan: dict) -> str:
+    identity = {key: value for key, value in plan.items() if key != "build_id"}
+    identity["hardware"] = {key: value for key, value in plan["hardware"].items() if key != "status"}
+    return hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def resolve_saved_plan(plan: dict) -> dict:
+    if "release" in plan:
+        from .releases import resolve_release_plan
+        return resolve_release_plan(plan["board"], plan["release"], plan["options"],
+                                    plan["windows_workaround"], plan["release"]["base"])
+    return resolve_plan(plan["board"], plan["upstream"], plan["profile"],
+                        plan["options"], plan["windows_workaround"])
 
 
 def run(command, cwd: Path | None = None) -> str:
@@ -149,14 +163,21 @@ def clone(source: str, destination: Path, commit: str) -> None:
         raise BuilderError("Checkout does not match pinned commit")
 
 
-def apply_plan(plan: dict, firmware: Path, root: Path | None = None) -> None:
+def apply_plan(plan: dict, firmware: Path, root: Path | None = None, patch_progress=None) -> None:
     root = root or data_root()
     verify_assets(plan, root)
     for item in plan["patches"]:
         target = firmware / "protobufs" if item["target"] == "protobufs" else firmware
         patch = contained(root, item["path"])
-        git(target, "apply", "--check", patch)
-        git(target, "apply", patch)
+        try:
+            git(target, "apply", "--check", patch)
+            git(target, "apply", patch)
+        except BuilderError as exc:
+            if patch_progress:
+                patch_progress(item, "conflict", str(exc))
+            raise BuilderError(f"Patch failed: {item['path']}\n{exc}") from exc
+        if patch_progress:
+            patch_progress(item, "applied")
     for item in plan["copies"]:
         target = firmware / "protobufs" if item["target"] == "protobufs" else firmware
         destination = contained(target, item["destination"])
@@ -184,6 +205,15 @@ def apply_plan(plan: dict, firmware: Path, root: Path | None = None) -> None:
         f"static constexpr uint32_t USB_SF_EXPECTED_MODEL = {plan['hardware']['hardware_model']};\n"
         f"static constexpr uint8_t USB_SF_BUILD_ID[32] = {{{identity}}};\n",
         encoding="utf-8", newline="\n")
+    if "release" in plan:
+        bridge = firmware / "src/mesh/UsbSfBridge.cpp"
+        content = bridge.read_text(encoding="utf-8")
+        baseline = load_catalog(root)["upstreams"][plan["release"]["base"]]["firmware"]["commit"]
+        anchor = f'memcpy(reply + 28, "{baseline}", 40);'
+        if content.count(anchor) != 1:
+            raise BuilderError("Release HELLO firmware identity anchor does not match")
+        content = content.replace(anchor, f'memcpy(reply + 28, "{plan["firmware"]["commit"]}", 40);')
+        bridge.write_text(content, encoding="utf-8", newline="\n")
 
 
 def source_hashes(firmware: Path, plan: dict) -> dict[str, str]:
@@ -221,13 +251,30 @@ def prepare(plan: dict, destination: Path, firmware_source: str | None = None,
         # Upstream's build metadata parser expects an HTTPS origin, not a local Windows path.
         git(firmware, "remote", "set-url", "origin", plan["firmware"]["url"])
         git(firmware / "protobufs", "remote", "set-url", "origin", plan["protobufs"]["url"])
-        apply_plan(plan, firmware, root)
+        return finish_prepare(plan, destination, root)
+    except (BuilderError, OSError) as exc:
+        manifest["status"] = "failed"
+        manifest["error"] = str(exc)
+        write_json(path, manifest)
+        raise
+
+
+def finish_prepare(plan, destination, root=None, patch_progress=None):
+    """Apply and record a freshly cloned checkout, shared by both source flows."""
+    firmware = destination / "firmware"
+    path = destination / "prepare.json"
+    manifest = {"status": "preparing", "plan": plan}
+    write_json(path, manifest)
+    try:
+        if "release" in plan:
+            from .releases import validate_sources
+            validate_sources(plan, firmware)
+        apply_plan(plan, firmware, root, patch_progress)
         manifest["source_sha256"] = source_hashes(firmware, plan)
         manifest["status"] = "prepared"
         write_json(path, manifest)
     except (BuilderError, OSError) as exc:
-        manifest["status"] = "failed"
-        manifest["error"] = str(exc)
+        manifest.update(status="failed", error=str(exc))
         write_json(path, manifest)
         raise
     return path
