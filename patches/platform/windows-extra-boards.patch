@@ -1,0 +1,22 @@
+--- a/windows-build.ini
++++ b/windows-build.ini
+@@ -21,3 +21,19 @@
+ extra_scripts =
+   ${esp32_common.extra_scripts}
+   extra_scripts/windows_lto.py
++
++[env:heltec-wsl-v3]
++build_unflags =
++  ${esp32_common.build_unflags}
++  -flto
++extra_scripts =
++  ${esp32_common.extra_scripts}
++  extra_scripts/windows_lto.py
++
++[env:tlora-t3s3-v1]
++build_unflags =
++  ${esp32_common.build_unflags}
++  -flto
++extra_scripts =
++  ${esp32_common.extra_scripts}
++  extra_scripts/windows_lto.py

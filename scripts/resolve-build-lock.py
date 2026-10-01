@@ -90,7 +90,9 @@ def python_closure(contrib):
 
 
 def main():
+    catalog = json.loads((Path(__file__).resolve().parents[1] / "registry/catalog.json").read_text(encoding="utf-8"))
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--board", choices=list(catalog["boards"]), default="tbeam-s3-core")
     parser.add_argument("--reference-core", type=Path, required=True)
     parser.add_argument("--reference-libraries", type=Path, required=True)
     parser.add_argument("--scratch", type=Path, required=True)
@@ -112,10 +114,10 @@ def main():
     with ThreadPoolExecutor(max_workers=4) as pool:
         packages = list(pool.map(lambda item: resolve_package(item, args.scratch), records))
     wheels = python_closure(args.reference_core / "packages/tool-esptoolpy/_contrib")
-    result = {"schema_version": 1, "id": "tbeam-s3-core-2.7.26-windows-amd64",
+    result = {"schema_version": 1, "id": f"{args.board}-2.7.26-windows-amd64",
               "system": "windows_amd64", "python_version": platform.python_version(),
               "platformio_version": "6.2.0", "firmware_commit": "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb",
-              "board": "tbeam-s3-core", "packages": packages, "python": wheels}
+              "board": args.board, "packages": packages, "python": wheels}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(f"Wrote {len(packages)} source/tool archives and {len(wheels)} Python wheels: {args.output}")

@@ -133,9 +133,14 @@ def materialize(tmp_path, files):
     return firmware
 
 
-@pytest.mark.parametrize("enabled", list(itertools.product((False, True), repeat=3)))
+@pytest.mark.parametrize("board,enabled", [
+    (board, bits)
+    for board, hardware in load_catalog()["boards"].items()
+    for bits in itertools.product((False, True), repeat=3)
+    if all(not active or name in hardware.get("supported_options", load_catalog()["options"])
+           for name, active in zip(("ua22", "cyrillic", "display-timeout"), bits))
+])
 @pytest.mark.parametrize("windows", [False, True])
-@pytest.mark.parametrize("board", ["tbeam-s3-core", "heltec-v3"])
 def test_real_upstream_option_matrix(tmp_path, pinned_files, enabled, windows, board):
     options = [key for key, active in zip(("ua22", "cyrillic", "display-timeout"), enabled) if active]
     plan = resolve_plan(board=board, options=options, windows_workaround=windows)
@@ -151,6 +156,9 @@ def test_real_upstream_option_matrix(tmp_path, pinned_files, enabled, windows, b
     assert ("static void serialIdle()" in power) == enabled[2]
     assert "-D MESHTASTIC_USB_SF_BRIDGE=1" in config
     assert (firmware / "windows-build.ini").exists() == windows
+    if windows:
+        override = f"[env:{board}]" in (firmware / "windows-build.ini").read_text()
+        assert override == (plan["hardware"].get("windows_lto") != "enabled")
     assert "reply[19] = 4;" in (firmware / "src/mesh/UsbSfBridge.cpp").read_text(encoding="utf-8")
     assert f"USB_SF_EXPECTED_MODEL = {plan['hardware']['hardware_model']}" in (firmware / "src/mesh/UsbSfBuild.h").read_text()
     for item in plan["copies"]:

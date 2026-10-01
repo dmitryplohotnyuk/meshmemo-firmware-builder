@@ -95,13 +95,18 @@ def execute_steps(ui, steps, execute):
 
 def prepare_flow(ui, execute):
     board = board_choice(ui)
-    upstreams = load_catalog()["boards"][board]["upstreams"]
+    catalog = load_catalog()
+    hardware = catalog["boards"][board]
+    upstreams = hardware["upstreams"]
+    available = hardware.get("supported_options", catalog["options"])
+    if hardware.get("display") == "none":
+        ui.write("У этого профиля нет штатного экрана; экранные опции недоступны.")
     upstream = upstreams[0] if len(upstreams) == 1 else upstreams[ui.choose("Версия Meshtastic", upstreams)]
     options = []
     for name, label in (("ua22", "Включить UA22 — предел мощности UA_433 22 dBm"),
-                        ("cyrillic", "Включить кириллицу OLED"),
+                        ("cyrillic", "Включить экранную кириллицу"),
                         ("display-timeout", "Включить гашение экрана по таймеру при USB-подключении")):
-        if ui.yes(label):
+        if name in available and ui.yes(label):
             options.append(name)
     plan = resolve_plan(board, upstream, "meshmemo", options)
     full = ui.choose("Что подготовить", ["Исходники с патчами", "Полную сборку прошивки"], "1") == 1
@@ -123,7 +128,7 @@ def prepare_flow(ui, execute):
     outputs = [workspace]
     if full:
         cache = ui.path("Папка кеша зависимостей", "cache", ".cache/dependencies")
-        runtime = ui.path("Новая папка окружения сборки", "new", f".work/{board}-runtime")
+        runtime = ui.path("Новая папка окружения сборки", "new", f".work/rt-{hardware['hardware_model']}")
         output = ui.path("Новая папка готовой прошивки", "new", f"dist/{board}-wizard")
         jobs = ui.jobs()
         outputs.extend([cache, runtime, output])

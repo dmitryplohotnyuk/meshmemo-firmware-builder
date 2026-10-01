@@ -86,6 +86,9 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
     unknown = set(selected) - catalog["options"].keys()
     if unknown:
         raise BuilderError(f"Unknown options: {', '.join(sorted(unknown))}")
+    unsupported = set(selected) - set(hardware.get("supported_options", catalog["options"]))
+    if unsupported:
+        raise BuilderError(f"{board} does not support options: {', '.join(sorted(unsupported))}")
     for repository in ("firmware", "protobufs"):
         if not re.fullmatch(r"[0-9a-f]{40}", base[repository]["commit"]):
             raise BuilderError(f"Unpinned {repository} commit")
@@ -97,6 +100,7 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
         flags.extend(catalog["options"][option]["build_flags"])
     if windows:
         patches.extend(catalog["windows_workaround"]["patches"])
+        patches.extend(hardware.get("windows_patches", []))
     flags.extend(selected_profile["build_flags"])
     flags.extend(hardware.get("build_flags", []))
     plan = {

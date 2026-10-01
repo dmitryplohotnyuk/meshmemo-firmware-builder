@@ -240,13 +240,15 @@ def test_malformed_json_structure_has_actionable_error(tmp_path, value):
         plan_update(flash_file(tmp_path), manifest, "tbeam-s3-core")
 
 
-def test_offline_plan_needs_no_subprocess_or_network(tmp_path, monkeypatch):
+@pytest.mark.parametrize("board,model", [("heltec-v3", 43), ("heltec-wsl-v3", 44),
+    ("heltec-wireless-tracker", 48), ("tlora-t3s3-v1", 16)])
+def test_offline_plan_needs_no_subprocess_or_network(tmp_path, monkeypatch, board, model):
     import socket
     import subprocess
     def forbidden(*args, **kwargs):
         pytest.fail("Offline planner attempted external access")
     monkeypatch.setattr(socket, "socket", forbidden)
     monkeypatch.setattr(subprocess, "Popen", forbidden)
-    manifest, _ = build_files(tmp_path, board="heltec-v3")
-    result = plan_update(flash_file(tmp_path), manifest, "heltec-v3")
-    assert result["status"] == "offline-compatible" and result["hardware_model"] == 43
+    manifest, _ = build_files(tmp_path, board=board)
+    result = plan_update(flash_file(tmp_path), manifest, board)
+    assert result["status"] == "offline-compatible" and result["hardware_model"] == model

@@ -1,0 +1,1764 @@
+{
+  "schema_version": 1,
+  "id": "tlora-t3s3-v1-2.7.26-windows-amd64",
+  "system": "windows_amd64",
+  "python_version": "3.12.14",
+  "platformio_version": "6.2.0",
+  "firmware_commit": "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb",
+  "board": "tlora-t3s3-v1",
+  "packages": [
+    {
+      "type": "platform",
+      "name": "espressif32",
+      "version": "6.13.0",
+      "spec": {
+        "owner": "platformio",
+        "id": 8026,
+        "name": "espressif32",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "espressif32",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/platformio/platform/espressif32/6.13.0/espressif32-6.13.0.tar.gz",
+        "sha256": "5d1032b43828773ba87cf2e509432202c0bfe64f7304b58c9d669f13b116c6e0",
+        "size": 1009115,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "framework-arduinoespressif32",
+      "version": "3.20017.241212+sha.dcc1105b",
+      "spec": {
+        "owner": "platformio",
+        "id": 8070,
+        "name": "framework-arduinoespressif32",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "framework-arduinoespressif32",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/platformio/tool/framework-arduinoespressif32/3.20017.241212+sha.dcc1105b/framework-arduinoespressif32-3.20017.241212+sha.dcc1105b.tar.gz",
+        "sha256": "7dbcfb86f9dfd5ecf6c881ed8226239d9ef63f27e1e1a2ddd87a87762e2ffbc9",
+        "size": 246321254,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "tool-esptoolpy",
+      "version": "2.41100.260830",
+      "spec": {
+        "owner": "platformio",
+        "id": 8161,
+        "name": "tool-esptoolpy",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "tool-esptoolpy",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-esptoolpy/2.41100.260830/tool-esptoolpy-2.41100.260830.tar.gz",
+        "sha256": "0de9971e2949c874387af768e71c4a71c13b63e0242ea931a34ba0a654b56382",
+        "size": 520523,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "tool-mklittlefs",
+      "version": "1.203.210628",
+      "spec": {
+        "owner": "platformio",
+        "id": 8173,
+        "name": "tool-mklittlefs",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "tool-mklittlefs",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-mklittlefs/1.203.210628/tool-mklittlefs-windows_amd64-1.203.210628.tar.gz",
+        "sha256": "d04f6a911f0b20e0c3630b676956bfff29981f4042dd4804fec9fba273ee8a99",
+        "size": 343860,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "tool-openocd-esp32",
+      "version": "2.1100.20220706",
+      "spec": {
+        "owner": "platformio",
+        "id": 8179,
+        "name": "tool-openocd-esp32",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "tool-openocd-esp32",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-openocd-esp32/2.1100.20220706/tool-openocd-esp32-windows-2.1100.20220706.tar.gz",
+        "sha256": "e01c0d73571850414ed2df725225a73ebf7427d6a82e3cfc6973c2c7f5af30aa",
+        "size": 2175355,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "toolchain-riscv32-esp",
+      "version": "8.4.0+2021r2-patch5",
+      "spec": {
+        "owner": "espressif",
+        "id": 15395,
+        "name": "toolchain-riscv32-esp",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "toolchain-riscv32-esp",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/espressif/tool/toolchain-riscv32-esp/8.4.0+2021r2-patch5/toolchain-riscv32-esp-windows_amd64-8.4.0+2021r2-patch5.tar.gz",
+        "sha256": "55c5c36593d87021ff19857d99da17a85fe4d708e77333e98ff54a8ac0ed1804",
+        "size": 258829021,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "toolchain-xtensa-esp32s3",
+      "version": "8.4.0+2021r2-patch5",
+      "spec": {
+        "owner": "espressif",
+        "id": 12550,
+        "name": "toolchain-xtensa-esp32s3",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "toolchain-xtensa-esp32s3",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/espressif/tool/toolchain-xtensa-esp32s3/8.4.0+2021r2-patch5/toolchain-xtensa-esp32s3-windows_amd64-8.4.0+2021r2-patch5.tar.gz",
+        "sha256": "c45a0427288d406a530a80f486fba7e77273f8152cb057cc48ef3aa64c085bf5",
+        "size": 84769299,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "tool",
+      "name": "tool-scons",
+      "version": "4.41101.0",
+      "spec": {
+        "owner": "platformio",
+        "id": 8192,
+        "name": "tool-scons",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "tool-scons",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/platformio/tool/tool-scons/4.41101.0/tool-scons-4.41101.0.tar.gz",
+        "sha256": "e405de1fcd3307fa80d624f0290c7cd30fbb47f67e135a9f56d7e46b6b895311",
+        "size": 523448,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit AHTX0",
+      "version": "2.0.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_AHTX0",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_AHTX0/archive/refs/tags/2.0.6.zip"
+      },
+      "directory": "Adafruit AHTX0",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_AHTX0/archive/refs/tags/2.0.6.zip",
+        "sha256": "2f1473e425e72720bfb4f739662261973c1b97a610269e9d19a79130a601a8c0",
+        "size": 919173,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit BME280 Library",
+      "version": "2.3.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_BME280_Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_BME280_Library/archive/refs/tags/2.3.0.zip"
+      },
+      "directory": "Adafruit BME280 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_BME280_Library/archive/refs/tags/2.3.0.zip",
+        "sha256": "1b5e24feaea78064ce2317457460b6df049ae5931b7d703e6e8553ed0726c6a7",
+        "size": 458106,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit BMP085 Library",
+      "version": "1.2.4",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit-BMP085-Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit-BMP085-Library/archive/refs/tags/1.2.4.zip"
+      },
+      "directory": "Adafruit BMP085 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit-BMP085-Library/archive/refs/tags/1.2.4.zip",
+        "sha256": "4ab39442ca77440adcc747bf1019a6864e9b36ad453f3a06bb72e3de278b4c03",
+        "size": 10345,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit BMP280 Library",
+      "version": "3.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_BMP280_Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_BMP280_Library/archive/refs/tags/3.0.0.zip"
+      },
+      "directory": "Adafruit BMP280 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_BMP280_Library/archive/refs/tags/3.0.0.zip",
+        "sha256": "70f1d0d46482896270f4886f5f1405a0c78686268f88040dfbe364121f70e375",
+        "size": 478654,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit BMP3XX Library",
+      "version": "2.1.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_BMP3XX",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_BMP3XX/archive/refs/tags/2.1.6.zip"
+      },
+      "directory": "Adafruit BMP3XX Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_BMP3XX/archive/refs/tags/2.1.6.zip",
+        "sha256": "783d97b96fc26e37ddde1a4ae612fff485a9d00b9972e94a600132f5ba7c8f37",
+        "size": 66336,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit BusIO",
+      "version": "1.17.4",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_BusIO",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_BusIO/archive/refs/tags/1.17.4.zip"
+      },
+      "directory": "Adafruit BusIO",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_BusIO/archive/refs/tags/1.17.4.zip",
+        "sha256": "e29b45a03874be4c054b04421073675efef5a950b2577b363cff8f17e90db26c",
+        "size": 36032,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit DPS310",
+      "version": "1.1.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_DPS310",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_DPS310/archive/refs/tags/1.1.6.zip"
+      },
+      "directory": "Adafruit DPS310",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_DPS310/archive/refs/tags/1.1.6.zip",
+        "sha256": "5eae4ab1dca1c069ee26c23a66e90b15854bcd1a9d5a1e687ce6f74abe44188b",
+        "size": 19041,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit GFX Library",
+      "version": "1.12.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit-GFX-Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit-GFX-Library/archive/refs/tags/1.12.6.zip"
+      },
+      "directory": "Adafruit GFX Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit-GFX-Library/archive/refs/tags/1.12.6.zip",
+        "sha256": "14b8e13fe563913be820920af55cd9c86686832b8a4a21b0090db697cce8c487",
+        "size": 360711,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit INA219",
+      "version": "1.2.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_INA219",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_INA219/archive/refs/tags/1.2.3.zip"
+      },
+      "directory": "Adafruit INA219",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_INA219/archive/refs/tags/1.2.3.zip",
+        "sha256": "c72159ac476c8bd27ba495014a784d821853cc401bcb64d42ffdda1d52afc351",
+        "size": 276335,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit INA260 Library",
+      "version": "1.5.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_INA260",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_INA260/archive/refs/tags/1.5.3.zip"
+      },
+      "directory": "Adafruit INA260 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_INA260/archive/refs/tags/1.5.3.zip",
+        "sha256": "7acd2006fe703c4214b755e41fcc936276f90a78c4f3a91e14257bf6b5734d12",
+        "size": 15653,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit LIS3DH",
+      "version": "1.3.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_LIS3DH",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_LIS3DH/archive/refs/tags/1.3.0.zip"
+      },
+      "directory": "Adafruit LIS3DH",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_LIS3DH/archive/refs/tags/1.3.0.zip",
+        "sha256": "722cc3fc6684a984b6d55f873a90f4610122d87576b8fe87fb813be41a4ae548",
+        "size": 482027,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit LPS2X",
+      "version": "2.0.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_LPS2X",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_LPS2X/archive/refs/tags/2.0.6.zip"
+      },
+      "directory": "Adafruit LPS2X",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_LPS2X/archive/refs/tags/2.0.6.zip",
+        "sha256": "c3752b679c5f4aa4b3c175dcbd53605a7394a3e2cc5f26dd2cd77bffb519be4b",
+        "size": 82303,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit LSM6DS",
+      "version": "4.7.4",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_LSM6DS",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_LSM6DS/archive/refs/tags/4.7.4.zip"
+      },
+      "directory": "Adafruit LSM6DS",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_LSM6DS/archive/refs/tags/4.7.4.zip",
+        "sha256": "098107002a2ff47fe2f4c4bc79f398f42a47bee253eebe3395924887557486a9",
+        "size": 593881,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit LTR390 Library",
+      "version": "1.1.2",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_LTR390",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_LTR390/archive/refs/tags/1.1.2.zip"
+      },
+      "directory": "Adafruit LTR390 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_LTR390/archive/refs/tags/1.1.2.zip",
+        "sha256": "c50c9fcd5fa783198311a06e61b27c697fc2d075a165b9503c76e02b86a789c9",
+        "size": 1638715,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit MAX1704X",
+      "version": "1.0.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_MAX1704X",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_MAX1704X/archive/refs/tags/1.0.3.zip"
+      },
+      "directory": "Adafruit MAX1704X",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_MAX1704X/archive/refs/tags/1.0.3.zip",
+        "sha256": "26dfacef4fcc6021905fb0c34594b485d350fbfa6cbb10702de23b1927655d8a",
+        "size": 16080,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit MCP9808 Library",
+      "version": "2.0.2",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_MCP9808_Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_MCP9808_Library/archive/refs/tags/2.0.2.zip"
+      },
+      "directory": "Adafruit MCP9808 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_MCP9808_Library/archive/refs/tags/2.0.2.zip",
+        "sha256": "4b142831eef6765e3b597b21b1be02185e3a7a8f14d157d128b795902a886a4d",
+        "size": 149005,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit MLX90614 Library",
+      "version": "2.1.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit-MLX90614-Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit-MLX90614-Library/archive/refs/tags/2.1.6.zip"
+      },
+      "directory": "Adafruit MLX90614 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit-MLX90614-Library/archive/refs/tags/2.1.6.zip",
+        "sha256": "1072fdac2237b69f173189c71563b02405febc859469944e2aa40903dc6df068",
+        "size": 14488,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit MPU6050",
+      "version": "2.2.9",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_MPU6050",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_MPU6050/archive/refs/tags/2.2.9.zip"
+      },
+      "directory": "Adafruit MPU6050",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_MPU6050/archive/refs/tags/2.2.9.zip",
+        "sha256": "f5c0193436436fbf02a3fac43146a390b2d0cb55bd78e707cecd63c2c6ffece8",
+        "size": 350659,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit NeoPixel",
+      "version": "1.15.5",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_NeoPixel",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_NeoPixel/archive/1.15.5.zip"
+      },
+      "directory": "Adafruit NeoPixel",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_NeoPixel/archive/1.15.5.zip",
+        "sha256": "a0f64da4646da51860acb94088082e3098d958a3699f4e55b7c426e9c6cea8d5",
+        "size": 90819,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit PCT2075",
+      "version": "1.0.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_PCT2075",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_PCT2075/archive/refs/tags/1.0.6.zip"
+      },
+      "directory": "Adafruit PCT2075",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_PCT2075/archive/refs/tags/1.0.6.zip",
+        "sha256": "1aea7ed079bca2634e4b69fbc47e266771aaad844ff436eb35ab4f1770ec5a3e",
+        "size": 319898,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit SH110X",
+      "version": "2.1.14",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_SH110x",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_SH110x/archive/refs/tags/2.1.14.zip"
+      },
+      "directory": "Adafruit SH110X",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_SH110x/archive/refs/tags/2.1.14.zip",
+        "sha256": "f6c7f0bb86f55c3df4fbc69e192f84a963ba5806aa619904023372f97b3d2823",
+        "size": 27370,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit SHT31 Library",
+      "version": "2.2.2",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_SHT31",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_SHT31/archive/refs/tags/2.2.2.zip"
+      },
+      "directory": "Adafruit SHT31 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_SHT31/archive/refs/tags/2.2.2.zip",
+        "sha256": "8c17fe0f29dea53d5cf865b43a6fb199ee0ba27abaaee7f082dd81be925b5756",
+        "size": 441836,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit SHT4x Library",
+      "version": "1.0.5",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_SHT4X",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_SHT4X/archive/refs/tags/1.0.5.zip"
+      },
+      "directory": "Adafruit SHT4x Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_SHT4X/archive/refs/tags/1.0.5.zip",
+        "sha256": "1bbc0b7a0a382e3cf89406c4d4e0a46771d4d0dadbc29aa3e09542c10d8313f9",
+        "size": 251846,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit SHTC3 Library",
+      "version": "1.0.2",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_SHTC3",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_SHTC3/archive/refs/tags/1.0.2.zip"
+      },
+      "directory": "Adafruit SHTC3 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_SHTC3/archive/refs/tags/1.0.2.zip",
+        "sha256": "d6c49982f25fe9fd2f97893af9a419af82fcab4a6bdafd72160833ea889d9927",
+        "size": 11452,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit SSD1306",
+      "version": "2.5.17",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_SSD1306",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_SSD1306/archive/2.5.17.zip"
+      },
+      "directory": "Adafruit SSD1306",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_SSD1306/archive/2.5.17.zip",
+        "sha256": "d96cbce027ec6e8746dbd0459c2de7ee3f9d9164c243721d5679468c992db4e2",
+        "size": 44840,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit TSL2561",
+      "version": "1.1.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_TSL2561",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_TSL2561/archive/refs/tags/1.1.3.zip"
+      },
+      "directory": "Adafruit TSL2561",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_TSL2561/archive/refs/tags/1.1.3.zip",
+        "sha256": "780a8e88a1b6472d6235dba0febf6cd37bd03e545b02f2dbe3b4c78ecd3bbd07",
+        "size": 16044,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit TSL2591 Library",
+      "version": "1.4.5",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_TSL2591_Library",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_TSL2591_Library/archive/refs/tags/1.4.5.zip"
+      },
+      "directory": "Adafruit TSL2591 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_TSL2591_Library/archive/refs/tags/1.4.5.zip",
+        "sha256": "25c6e5ea89bf8aac73ed54bb726a98c4fc4a795eff4be60710967de23b0db73b",
+        "size": 17586,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit Unified Sensor",
+      "version": "1.1.15",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_Sensor",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_Sensor/archive/refs/tags/1.1.15.zip"
+      },
+      "directory": "Adafruit Unified Sensor",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_Sensor/archive/refs/tags/1.1.15.zip",
+        "sha256": "95556ec61cd92df3e15c450d8febed64284d0b5416ce3ac0891fab326130b3c7",
+        "size": 16829,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Adafruit VEML7700 Library",
+      "version": "2.1.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Adafruit_VEML7700",
+        "requirements": null,
+        "uri": "https://github.com/adafruit/Adafruit_VEML7700/archive/refs/tags/2.1.6.zip"
+      },
+      "directory": "Adafruit VEML7700 Library",
+      "archive": {
+        "url": "https://github.com/adafruit/Adafruit_VEML7700/archive/refs/tags/2.1.6.zip",
+        "sha256": "6fb2c8bdfefbefde9cf330fc5ea774093d64f99d382a8a4374271cbbe49a9097",
+        "size": 14278,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "arduino-fsm",
+      "version": "2.2.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "arduino-fsm",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/arduino-fsm/archive/7db3702bf0cfe97b783d6c72595e3f38e0b19159.zip"
+      },
+      "directory": "arduino-fsm",
+      "archive": {
+        "url": "https://github.com/meshtastic/arduino-fsm/archive/7db3702bf0cfe97b783d6c72595e3f38e0b19159.zip",
+        "sha256": "e60ddfa4d6c90481035e0f97ebf6c7ac1ae2631075d020108d2c8d0f8ce872f4",
+        "size": 10749,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "ArduinoThread",
+      "version": "0.0.0+20260915215406",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "ArduinoThread",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/ArduinoThread/archive/b841b0415721f1341ea41cccfb4adccfaf951567.zip"
+      },
+      "directory": "ArduinoThread",
+      "archive": {
+        "url": "https://github.com/meshtastic/ArduinoThread/archive/b841b0415721f1341ea41cccfb4adccfaf951567.zip",
+        "sha256": "ca1ed3bf3b0cb4111ad9f6238bd59bc745de7b5817472499259f1269a2ed07ef",
+        "size": 31949,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "BH1750_WE",
+      "version": "1.1.10",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "BH1750_WE",
+        "requirements": null,
+        "uri": "https://github.com/wollewald/BH1750_WE/archive/refs/tags/1.1.10.zip"
+      },
+      "directory": "BH1750_WE",
+      "archive": {
+        "url": "https://github.com/wollewald/BH1750_WE/archive/refs/tags/1.1.10.zip",
+        "sha256": "01537b5643cf357d527573ea4fe29af7e38bfdc9cba62d56df8bd1bf80ecf6c2",
+        "size": 7306,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "BME68x Sensor library",
+      "version": "1.3.40408",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Bosch-BME68x-Library",
+        "requirements": null,
+        "uri": "https://github.com/boschsensortec/Bosch-BME68x-Library/archive/refs/tags/v1.3.40408.zip"
+      },
+      "directory": "BME68x Sensor library",
+      "archive": {
+        "url": "https://github.com/boschsensortec/Bosch-BME68x-Library/archive/refs/tags/v1.3.40408.zip",
+        "sha256": "dbfe4ae056047e52c1792758d6214df18d9312c260355ef922b370ea2c25fefe",
+        "size": 48320,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "bsec2",
+      "version": "1.10.2610",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Bosch-BSEC2-Library",
+        "requirements": null,
+        "uri": "https://github.com/boschsensortec/Bosch-BSEC2-Library/archive/refs/tags/1.10.2610.zip"
+      },
+      "directory": "bsec2",
+      "archive": {
+        "url": "https://github.com/boschsensortec/Bosch-BSEC2-Library/archive/refs/tags/1.10.2610.zip",
+        "sha256": "0997799bbe37ec75139b7148e4510f87eed21fc7d54d85bc77ddb1988bcaabc1",
+        "size": 896981,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "ClosedCube OPT3001",
+      "version": "1.1.2",
+      "spec": {
+        "owner": "closedcube",
+        "id": 838,
+        "name": "ClosedCube OPT3001",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "ClosedCube OPT3001",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/closedcube/library/ClosedCube%20OPT3001/1.1.2/ClosedCubeOPT3001-1.1.2.tar.gz",
+        "sha256": "95d3878e32ead6be60ade8636e0de8758244f1386f7d643e9130e54b1f73d8b4",
+        "size": 3562,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Crypto",
+      "version": "0.4.0",
+      "spec": {
+        "owner": "rweather",
+        "id": 1168,
+        "name": "Crypto",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "Crypto",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/rweather/library/Crypto/0.4.0/Crypto-0.4.0.tar.gz",
+        "sha256": "1867740aad0d61bdcbac25f6dbc8eefe6eed9e7b37f48d9d0b9d80500ad431e0",
+        "size": 162696,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "library",
+      "name": "DFRobot_BMM150",
+      "version": "1.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "DFRobot_BMM150",
+        "requirements": null,
+        "uri": "https://github.com/DFRobot/DFRobot_BMM150/archive/refs/tags/V1.0.0.zip"
+      },
+      "directory": "DFRobot_BMM150",
+      "archive": {
+        "url": "https://github.com/DFRobot/DFRobot_BMM150/archive/refs/tags/V1.0.0.zip",
+        "sha256": "cb80ce32f929bf809c39d2dd7703eb5effa348dae2d7835c9a4085c0c26b29f8",
+        "size": 170820,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "DFRobot_LarkWeatherStation",
+      "version": "1.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "DFRobot_LarkWeatherStation",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/DFRobot_LarkWeatherStation/archive/4de3a9cadef0f6a5220a8a906cf9775b02b0040d.zip"
+      },
+      "directory": "DFRobot_LarkWeatherStation",
+      "archive": {
+        "url": "https://github.com/meshtastic/DFRobot_LarkWeatherStation/archive/4de3a9cadef0f6a5220a8a906cf9775b02b0040d.zip",
+        "sha256": "5fb85248a5ddc3df2816935ec29332df621c456851122e68f13c6a1aea0c852c",
+        "size": 19378,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "DFRobot_RainfallSensor",
+      "version": "1.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "DFRobot_RainfallSensor",
+        "requirements": null,
+        "uri": "https://github.com/DFRobot/DFRobot_RainfallSensor/archive/38fea5e02b40a5430be6dab39a99a6f6347d667e.zip"
+      },
+      "directory": "DFRobot_RainfallSensor",
+      "archive": {
+        "url": "https://github.com/DFRobot/DFRobot_RainfallSensor/archive/38fea5e02b40a5430be6dab39a99a6f6347d667e.zip",
+        "sha256": "3140f3045fde41b68377116452641377770db5a1191f6a37a3341344b2c1900a",
+        "size": 139016,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "DFRobot_RTU",
+      "version": "1.0.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "DFRobot_RTU",
+        "requirements": null,
+        "uri": "https://github.com/DFRobot/DFRobot_RTU/archive/refs/tags/V1.0.6.zip"
+      },
+      "directory": "DFRobot_RTU",
+      "archive": {
+        "url": "https://github.com/DFRobot/DFRobot_RTU/archive/refs/tags/V1.0.6.zip",
+        "sha256": "3e12202abd8eee2198579e3b057251a42f579acc3e059803bb68ee1754c94a40",
+        "size": 26763,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "EmotiBit MLX90632",
+      "version": "1.0.8",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "EmotiBit_MLX90632",
+        "requirements": null,
+        "uri": "https://github.com/EmotiBit/EmotiBit_MLX90632/archive/refs/tags/v1.0.8.zip"
+      },
+      "directory": "EmotiBit MLX90632",
+      "archive": {
+        "url": "https://github.com/EmotiBit/EmotiBit_MLX90632/archive/refs/tags/v1.0.8.zip",
+        "sha256": "b21bcd5a2b1061bad9b462be676713cb8bb05b86ad205d96a7fa359103c9a8ac",
+        "size": 23567,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "ErriezCRC32",
+      "version": "1.0.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "ErriezCRC32",
+        "requirements": null,
+        "uri": "https://github.com/Erriez/ErriezCRC32/archive/refs/tags/1.0.1.zip"
+      },
+      "directory": "ErriezCRC32",
+      "archive": {
+        "url": "https://github.com/Erriez/ErriezCRC32/archive/refs/tags/1.0.1.zip",
+        "sha256": "a3932d4beff01f12df0e3904fbc45c9a3be105d31c58cb6ff4ee17c9c2d24548",
+        "size": 167751,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "ESP32 Codec2",
+      "version": "1.0.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "ESP32_Codec2",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/ESP32_Codec2/archive/633326c78ac251c059ab3a8c430fcdf25b41672f.zip"
+      },
+      "directory": "ESP32 Codec2",
+      "archive": {
+        "url": "https://github.com/meshtastic/ESP32_Codec2/archive/633326c78ac251c059ab3a8c430fcdf25b41672f.zip",
+        "sha256": "d938b1ac33cf40160d66505285598f3dd7199bd3089d5d55f8f136a637ec1df1",
+        "size": 603230,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "esp32_https_server",
+      "version": "1.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "esp32_https_server",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/esp32_https_server/archive/0c71f380390ad483ff134ad938e07f6cf1226c5b.zip"
+      },
+      "directory": "esp32_https_server",
+      "archive": {
+        "url": "https://github.com/meshtastic/esp32_https_server/archive/0c71f380390ad483ff134ad938e07f6cf1226c5b.zip",
+        "sha256": "f0561a716a5064c1d3d24bc7b909f8c1bc41d48f29eaa40be1b81064e40c76e9",
+        "size": 1316055,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "ESP8266 and ESP32 OLED driver for SSD1306 displays",
+      "version": "4.4.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "esp8266-oled-ssd1306",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/esp8266-oled-ssd1306/archive/2e26010040e028baee72e2093402fa7b3c59e430.zip"
+      },
+      "directory": "ESP8266 and ESP32 OLED driver for SSD1306 displays",
+      "archive": {
+        "url": "https://github.com/meshtastic/esp8266-oled-ssd1306/archive/2e26010040e028baee72e2093402fa7b3c59e430.zip",
+        "sha256": "a23220b483ffea5c5dcf325caf0d0032ea4f470bd0b47edfc02634698e23d355",
+        "size": 335580,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "ICM42670P",
+      "version": "1.0.8",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "motion.arduino.ICM42670P",
+        "requirements": null,
+        "uri": "https://github.com/tdk-invn-oss/motion.arduino.ICM42670P/archive/refs/tags/1.0.8.zip"
+      },
+      "directory": "ICM42670P",
+      "archive": {
+        "url": "https://github.com/tdk-invn-oss/motion.arduino.ICM42670P/archive/refs/tags/1.0.8.zip",
+        "sha256": "36dd8377d00894fd72a258136a38b359bf9065a5748624d5e18363734d3de387",
+        "size": 1604615,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "INA226",
+      "version": "0.6.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "INA226",
+        "requirements": null,
+        "uri": "https://github.com/RobTillaart/INA226/archive/refs/tags/0.6.6.zip"
+      },
+      "directory": "INA226",
+      "archive": {
+        "url": "https://github.com/RobTillaart/INA226/archive/refs/tags/0.6.6.zip",
+        "sha256": "fd7a9afc7f4181ae6a7bfd4b8d45304c2c1487d9a4df667413cc4a9a8a498269",
+        "size": 36943,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "INA3221",
+      "version": "1.0.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "INA3221",
+        "requirements": null,
+        "uri": "https://github.com/sgtwilko/INA3221/archive/bb03d7e9bfcc74fc798838a54f4f99738f29fc6a.zip"
+      },
+      "directory": "INA3221",
+      "archive": {
+        "url": "https://github.com/sgtwilko/INA3221/archive/bb03d7e9bfcc74fc798838a54f4f99738f29fc6a.zip",
+        "sha256": "49dd44118f66d97cbecc540bda97ec471d3f9a68372490198c219e180b003289",
+        "size": 12783,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "libpax",
+      "version": "1.1.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "libpax",
+        "requirements": null,
+        "uri": "https://github.com/dbinfrago/libpax/archive/17302340f100efbc4bee5022ecc72047d6d93ed4.zip"
+      },
+      "directory": "libpax",
+      "archive": {
+        "url": "https://github.com/dbinfrago/libpax/archive/17302340f100efbc4bee5022ecc72047d6d93ed4.zip",
+        "sha256": "e44f31988a624385876b0bb6d242be6cab6f325bbc231fd7c41e93d76be1a7f8",
+        "size": 39900,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Nanopb",
+      "version": "0.4.9+1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "nanopb",
+        "requirements": null,
+        "uri": "https://github.com/nanopb/nanopb/archive/refs/tags/nanopb-0.4.9.1.zip"
+      },
+      "directory": "Nanopb",
+      "archive": {
+        "url": "https://github.com/nanopb/nanopb/archive/refs/tags/nanopb-0.4.9.1.zip",
+        "sha256": "b91e9c6800d1dd54ea3db8945111807bce07862438989b6f6c782a386119b929",
+        "size": 1410910,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "NimBLE-Arduino",
+      "version": "1.4.3",
+      "spec": {
+        "owner": "h2zero",
+        "id": 11070,
+        "name": "NimBLE-Arduino",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "NimBLE-Arduino",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/h2zero/library/NimBLE-Arduino/1.4.3/NimBLE-Arduino-1.4.3.tar.gz",
+        "sha256": "9b6e4cabf8c90133ee1d7bc9c10edff14f22632ef83fe186015c3d1721310efd",
+        "size": 940429,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "library",
+      "name": "NonBlockingRTTTL",
+      "version": "1.4.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "NonBlockingRTTTL",
+        "requirements": null,
+        "uri": "https://github.com/end2endzone/NonBlockingRTTTL/archive/refs/tags/1.4.0.zip"
+      },
+      "directory": "NonBlockingRTTTL",
+      "archive": {
+        "url": "https://github.com/end2endzone/NonBlockingRTTTL/archive/refs/tags/1.4.0.zip",
+        "sha256": "a853151d02a00b2392cbebd8881a7689bc2160f969b2d165baa896424464d475",
+        "size": 264431,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "NTPClient",
+      "version": "3.2.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "NTPClient",
+        "requirements": null,
+        "uri": "https://github.com/arduino-libraries/NTPClient/archive/refs/tags/3.2.1.zip"
+      },
+      "directory": "NTPClient",
+      "archive": {
+        "url": "https://github.com/arduino-libraries/NTPClient/archive/refs/tags/3.2.1.zip",
+        "sha256": "0cc93807737f95d5e6bd6c1bba144bbead98598cdf72f2d90d0584e7ad0526dc",
+        "size": 14110,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "OneButton",
+      "version": "2.6.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "OneButton",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/OneButton/archive/fa352d668c53f290cfa480a5f79ad422cd828c70.zip"
+      },
+      "directory": "OneButton",
+      "archive": {
+        "url": "https://github.com/meshtastic/OneButton/archive/fa352d668c53f290cfa480a5f79ad422cd828c70.zip",
+        "sha256": "127a962a4453adafce3e02787e9cbf73a85a1d19c2cadd2f162128f6d5393786",
+        "size": 37461,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "QMC5883LCompass",
+      "version": "1.2.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "QMC5883LCompass",
+        "requirements": null,
+        "uri": "https://github.com/mprograms/QMC5883LCompass/archive/refs/tags/v1.2.3.zip"
+      },
+      "directory": "QMC5883LCompass",
+      "archive": {
+        "url": "https://github.com/mprograms/QMC5883LCompass/archive/refs/tags/v1.2.3.zip",
+        "sha256": "d03d18dbac485141e7246bf72eb972eb8b5c6fbefc74adc1971e3937a8cbedca",
+        "size": 27444,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "RadioLib",
+      "version": "7.6.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "RadioLib",
+        "requirements": null,
+        "uri": "https://github.com/jgromes/RadioLib/archive/refs/tags/7.6.0.zip"
+      },
+      "directory": "RadioLib",
+      "archive": {
+        "url": "https://github.com/jgromes/RadioLib/archive/refs/tags/7.6.0.zip",
+        "sha256": "c588914e5a6cea1aa3c6987149996d546c40fbf5c0d0b8ea6d3edb9bc7a287d3",
+        "size": 4675913,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Sensirion Core",
+      "version": "0.7.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "arduino-core",
+        "requirements": null,
+        "uri": "https://github.com/Sensirion/arduino-core/archive/refs/tags/0.7.3.zip"
+      },
+      "directory": "Sensirion Core",
+      "archive": {
+        "url": "https://github.com/Sensirion/arduino-core/archive/refs/tags/0.7.3.zip",
+        "sha256": "ef64732deacb4138fde560f3833b111942604b44ebfa48e511213c4e41117029",
+        "size": 38818,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Sensirion I2C SCD30",
+      "version": "1.1.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "arduino-i2c-scd30",
+        "requirements": null,
+        "uri": "https://github.com/Sensirion/arduino-i2c-scd30/archive/1.1.1.zip"
+      },
+      "directory": "Sensirion I2C SCD30",
+      "archive": {
+        "url": "https://github.com/Sensirion/arduino-i2c-scd30/archive/1.1.1.zip",
+        "sha256": "6f4beb5cabd21e9f70c851101f512fe8d2a5fb5846404e7a2030c18663daafc0",
+        "size": 1843932,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Sensirion I2C SCD4x",
+      "version": "1.1.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "arduino-i2c-scd4x",
+        "requirements": null,
+        "uri": "https://github.com/Sensirion/arduino-i2c-scd4x/archive/refs/tags/1.1.0.zip"
+      },
+      "directory": "Sensirion I2C SCD4x",
+      "archive": {
+        "url": "https://github.com/Sensirion/arduino-i2c-scd4x/archive/refs/tags/1.1.0.zip",
+        "sha256": "6481abf2231ca915f03964b22f6f55532eded7298bed7d10a2bb76980228e19f",
+        "size": 2000108,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Sensirion I2C SFA3x",
+      "version": "1.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "arduino-i2c-sfa3x",
+        "requirements": null,
+        "uri": "https://github.com/Sensirion/arduino-i2c-sfa3x/archive/refs/tags/1.0.0.zip"
+      },
+      "directory": "Sensirion I2C SFA3x",
+      "archive": {
+        "url": "https://github.com/Sensirion/arduino-i2c-sfa3x/archive/refs/tags/1.0.0.zip",
+        "sha256": "05e997e35cc6c1fd45cc2c2c0b3b152806423e67f1022116a7b65b9410868889",
+        "size": 2511170,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "SparkFun 9DoF IMU Breakout - ICM 20948 - Arduino Library",
+      "version": "1.3.2",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "SparkFun_ICM-20948_ArduinoLibrary",
+        "requirements": null,
+        "uri": "https://github.com/sparkfun/SparkFun_ICM-20948_ArduinoLibrary/archive/refs/tags/v1.3.2.zip"
+      },
+      "directory": "SparkFun 9DoF IMU Breakout - ICM 20948 - Arduino Library",
+      "archive": {
+        "url": "https://github.com/sparkfun/SparkFun_ICM-20948_ArduinoLibrary/archive/refs/tags/v1.3.2.zip",
+        "sha256": "63fe1a019f019068e610b9ff1fdb267508aa833ee3da7dad51e5967ea68daac7",
+        "size": 215379,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "SparkFun MAX3010x Pulse and Proximity Sensor Library",
+      "version": "1.1.2",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "SparkFun_MAX3010x_Sensor_Library",
+        "requirements": null,
+        "uri": "https://github.com/sparkfun/SparkFun_MAX3010x_Sensor_Library/archive/refs/tags/v1.1.2.zip"
+      },
+      "directory": "SparkFun MAX3010x Pulse and Proximity Sensor Library",
+      "archive": {
+        "url": "https://github.com/sparkfun/SparkFun_MAX3010x_Sensor_Library/archive/refs/tags/v1.1.2.zip",
+        "sha256": "f28d9d9e888ccfbe14de9966573bc7d40faf56bc2c18a01feef9b2c87a278064",
+        "size": 76126,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "SparkFun MMC5983MA Magnetometer Arduino Library",
+      "version": "1.1.5",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "SparkFun_MMC5983MA_Magnetometer_Arduino_Library",
+        "requirements": null,
+        "uri": "https://github.com/sparkfun/SparkFun_MMC5983MA_Magnetometer_Arduino_Library/archive/v1.1.5.zip"
+      },
+      "directory": "SparkFun MMC5983MA Magnetometer Arduino Library",
+      "archive": {
+        "url": "https://github.com/sparkfun/SparkFun_MMC5983MA_Magnetometer_Arduino_Library/archive/v1.1.5.zip",
+        "sha256": "1b178e0de1b9e417e513c7e46447b18598ef35de0b0fa1dc740f3e2c203f9f82",
+        "size": 575187,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "SparkFun Qwiic Scale NAU7802 Arduino Library",
+      "version": "1.0.6",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "SparkFun_Qwiic_Scale_NAU7802_Arduino_Library",
+        "requirements": null,
+        "uri": "https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library/archive/refs/tags/v1.0.6.zip"
+      },
+      "directory": "SparkFun Qwiic Scale NAU7802 Arduino Library",
+      "archive": {
+        "url": "https://github.com/sparkfun/SparkFun_Qwiic_Scale_NAU7802_Arduino_Library/archive/refs/tags/v1.0.6.zip",
+        "sha256": "e181e3eee7b75565fc1844da65d919215aad1f1258ecb2b21af09f9a97a584f1",
+        "size": 29014,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Syslog",
+      "version": "2.0.0",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "Syslog",
+        "requirements": null,
+        "uri": "https://github.com/arcao/Syslog/archive/refs/tags/v2.0.zip"
+      },
+      "directory": "Syslog",
+      "archive": {
+        "url": "https://github.com/arcao/Syslog/archive/refs/tags/v2.0.zip",
+        "sha256": "8d6a204b47ae5155308ae9d16769712bb986865310e91b18d83fb031d0c4e466",
+        "size": 19651,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "TBPubSubClient",
+      "version": "2.12.1",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "pubsubclient",
+        "requirements": null,
+        "uri": "https://github.com/thingsboard/pubsubclient/archive/refs/tags/v2.12.1.zip"
+      },
+      "directory": "TBPubSubClient",
+      "archive": {
+        "url": "https://github.com/thingsboard/pubsubclient/archive/refs/tags/v2.12.1.zip",
+        "sha256": "1793b5345fa19db80a09aed0279da50ea6f4782434ee1fce2b869acc75bd5fca",
+        "size": 44030,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "TinyGPSPlus",
+      "version": "1.0.3",
+      "spec": {
+        "owner": null,
+        "id": null,
+        "name": "TinyGPSPlus",
+        "requirements": null,
+        "uri": "https://github.com/meshtastic/TinyGPSPlus/archive/71a82db35f3b973440044c476d4bcdc673b104f4.zip"
+      },
+      "directory": "TinyGPSPlus",
+      "archive": {
+        "url": "https://github.com/meshtastic/TinyGPSPlus/archive/71a82db35f3b973440044c476d4bcdc673b104f4.zip",
+        "sha256": "d399ebdbe27e47713b89a7a9a15274147646b92f0bfdf311487497903b8819d6",
+        "size": 51211,
+        "suffix": ".zip"
+      }
+    },
+    {
+      "type": "library",
+      "name": "XPowersLib",
+      "version": "0.3.3",
+      "spec": {
+        "owner": "lewisxhe",
+        "id": 14299,
+        "name": "XPowersLib",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "XPowersLib",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/lewisxhe/library/XPowersLib/0.3.3/XPowersLib-0.3.3.tar.gz",
+        "sha256": "a2fe2a606f7e7869f26c28187dcdf2b0283194bbdbf26b65646f07d38bd451b1",
+        "size": 101720,
+        "suffix": ".tar.gz"
+      }
+    },
+    {
+      "type": "library",
+      "name": "Unity",
+      "version": "2.6.1",
+      "spec": {
+        "owner": "throwtheswitch",
+        "id": 13894,
+        "name": "Unity",
+        "requirements": null,
+        "uri": null
+      },
+      "directory": "Unity",
+      "archive": {
+        "url": "https://dl.registry.platformio.org/download/throwtheswitch/library/Unity/2.6.1/Unity-2.6.1.tar.gz",
+        "sha256": "d74dc46682a2a9d6fd7295905e6511dce1777141636f3b3b422e5e3958d2d610",
+        "size": 73574,
+        "suffix": ".tar.gz"
+      }
+    }
+  ],
+  "python": [
+    {
+      "name": "ajsonrpc",
+      "version": "1.2.0",
+      "filename": "ajsonrpc-1.2.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/cf/6f/6abff7fe6813e6f94129a50c8c70bf70fb33ed2515b1037e703cef6d7a7e/ajsonrpc-1.2.0-py3-none-any.whl",
+      "sha256": "0fa2c1cf8e619d18ffee96043822032d6520eda65d3b712f9540a3a63e9cac25",
+      "size": 22753
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1",
+      "filename": "anyio-4.15.1-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/12/b8/4bd346e22b28902df4d651910f5242c28d84e4a5c2435ca5c3f797ed7e2e/anyio-4.15.1-py3-none-any.whl",
+      "sha256": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+      "size": 132079
+    },
+    {
+      "name": "bitarray",
+      "version": "3.11.0",
+      "filename": "bitarray-3.11.0-cp312-cp312-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/f1/c4/0a1608187e6d21b30c341ebcce6f75efbc8fe289f87ad58aa4149ce59828/bitarray-3.11.0-cp312-cp312-win_amd64.whl",
+      "sha256": "5db38c0a36d07190c3629c65dab2504233a56b1c35d8b1cc3d7369943d028711",
+      "size": 171542
+    },
+    {
+      "name": "bitstring",
+      "version": "4.3.1",
+      "filename": "bitstring-4.3.1-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/75/2d/174566b533755ddf8efb32a5503af61c756a983de379f8ad3aed6a982d38/bitstring-4.3.1-py3-none-any.whl",
+      "sha256": "69d1587f0ac18dc7d93fc7e80d5f447161a33e57027e726dc18a0a8bacf1711a",
+      "size": 71930
+    },
+    {
+      "name": "bottle",
+      "version": "0.13.4",
+      "filename": "bottle-0.13.4-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/83/f6/b55ec74cfe68c6584163faa311503c20b0da4c09883a41e8e00d6726c954/bottle-0.13.4-py2.py3-none-any.whl",
+      "sha256": "045684fbd2764eac9cdeb824861d1551d113e8b683d8d26e296898d3dd99a12e",
+      "size": 103807
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22",
+      "filename": "certifi-2026.7.22-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/0b/a7/71ac2cff56fec219ed242bb11b8efb69fcc4bec75db06fb7bfe35de520e6/certifi-2026.7.22-py3-none-any.whl",
+      "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+      "size": 136983
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1",
+      "filename": "cffi-2.1.1-cp312-cp312-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/d9/79/615cc094e2fb508cade7de88d3b4f6c4ec2bab695c97bce9153dc65aadf5/cffi-2.1.1-cp312-cp312-win_amd64.whl",
+      "sha256": "f53e442b08449d42821fa4a4fba000095af9f62742a500f978a9f557ec44339a",
+      "size": 185919
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.1",
+      "filename": "charset_normalizer-3.5.1-cp312-cp312-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/9d/7a/4c6c298171e6b3e745633180ff59350fc0ca0db1ffd28df1e369e0579f71/charset_normalizer-3.5.1-cp312-cp312-win_amd64.whl",
+      "sha256": "3617ac3cfd8b9888f145ad89dd6e692285834b0201c6074a5eeaad3fd4d668c2",
+      "size": 200551
+    },
+    {
+      "name": "click",
+      "version": "8.5.0",
+      "filename": "click-8.5.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl",
+      "sha256": "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360",
+      "size": 125251
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6",
+      "filename": "colorama-0.4.6-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl",
+      "sha256": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+      "size": 25335
+    },
+    {
+      "name": "cryptography",
+      "version": "46.0.7",
+      "filename": "cryptography-46.0.7-cp311-abi3-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/2b/02/7788f9fefa1d060ca68717c3901ae7fffa21ee087a90b7f23c7a603c32ae/cryptography-46.0.7-cp311-abi3-win_amd64.whl",
+      "sha256": "397655da831414d165029da9bc483bed2fe0e75dde6a1523ec2fe63f3c46046b",
+      "size": 3488363
+    },
+    {
+      "name": "ecdsa",
+      "version": "0.19.2",
+      "filename": "ecdsa-0.19.2-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/51/79/119091c98e2bf49e24ed9f3ae69f816d715d2904aefa6a2baa039a2ba0b0/ecdsa-0.19.2-py2.py3-none-any.whl",
+      "sha256": "840f5dc5e375c68f36c1a7a5b9caad28f95daa65185c9253c0c08dd952bb7399",
+      "size": 150818
+    },
+    {
+      "name": "grpcio",
+      "version": "1.84.0",
+      "filename": "grpcio-1.84.0-cp312-cp312-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/85/2c/309268b7b39f6deb2342f634841e105623a0b67982e8b10ec516782ff1c6/grpcio-1.84.0-cp312-cp312-win_amd64.whl",
+      "sha256": "49717e857899f4136d7657bf5aded61ac479110a075438290923a4d86af7cd02",
+      "size": 5253534
+    },
+    {
+      "name": "grpcio-tools",
+      "version": "1.84.0",
+      "filename": "grpcio_tools-1.84.0-cp312-cp312-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/e7/2c/599ce7a1d0c9c232bde27d327d605d72f07437e0e665ca8153d499557367/grpcio_tools-1.84.0-cp312-cp312-win_amd64.whl",
+      "sha256": "848338ebb0f1bccaf15c09d3905a2bda5907101ca2c88ed411c4ae707615f8ac",
+      "size": 1192285
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0",
+      "filename": "h11-0.16.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl",
+      "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+      "size": 37515
+    },
+    {
+      "name": "idna",
+      "version": "3.19",
+      "filename": "idna-3.19-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/57/b0/0e52c878c53f245edd3a11020f20979b3f490f245af532c7cae3027754b5/idna-3.19-py3-none-any.whl",
+      "sha256": "815e7be7a7806d54abb586dc943addc79e8b2ee16915059658cbeff4b1b43bf4",
+      "size": 68550
+    },
+    {
+      "name": "intelhex",
+      "version": "2.3.0",
+      "filename": "intelhex-2.3.0-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/97/78/79461288da2b13ed0a13deb65c4ad1428acb674b95278fa9abf1cefe62a2/intelhex-2.3.0-py2.py3-none-any.whl",
+      "sha256": "87cc5225657524ec6361354be928adfd56bcf2a3dcc646c40f8f094c39c07db4",
+      "size": 50914
+    },
+    {
+      "name": "marshmallow",
+      "version": "4.3.1",
+      "filename": "marshmallow-4.3.1-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/43/57/4526ca0e214a3d158690e3393f6d547a2f8070f88d6388ab21d5b0aac8a1/marshmallow-4.3.1-py3-none-any.whl",
+      "sha256": "e65accfbe277546df92ed7996a678c90e063e9a7c2a2f5e03f7d0b90e3768c42",
+      "size": 49219
+    },
+    {
+      "name": "pip",
+      "version": "25.0.1",
+      "filename": "pip-25.0.1-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/c9/bc/b7db44f5f39f9d0494071bddae6880eb645970366d0a200022a1a93d57f5/pip-25.0.1-py3-none-any.whl",
+      "sha256": "c46efd13b6aa8279f33f2864459c8ce587ea6a1a59ee20de055868d8f7688f7f",
+      "size": 1841526
+    },
+    {
+      "name": "platformio",
+      "version": "6.2.0",
+      "filename": "platformio-6.2.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/bf/98/6c5cc249129c72b076ca238a435c48b48568d866c12890e01ee50fb8f322/platformio-6.2.0-py3-none-any.whl",
+      "sha256": "c3de675539f90cbd51466dd326f2fb64c7b83a54c7229b6c30c55865a85eddc2",
+      "size": 418578
+    },
+    {
+      "name": "protobuf",
+      "version": "7.36.1",
+      "filename": "protobuf-7.36.1-cp310-abi3-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/db/37/155788a0d8daded960375af604202805308169f9b859419ea0aa370946e2/protobuf-7.36.1-cp310-abi3-win_amd64.whl",
+      "sha256": "51139351435d9b43d88a55eaa49fb6f737fbb478fb0cbf2cf694d1a04a9d3363",
+      "size": 456518
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0",
+      "filename": "pycparser-3.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl",
+      "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+      "size": 48172
+    },
+    {
+      "name": "pyelftools",
+      "version": "0.33",
+      "filename": "pyelftools-0.33-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/46/2a/f9697576603dae937727827505a6126a066affb227034e77e6f9068910da/pyelftools-0.33-py3-none-any.whl",
+      "sha256": "f215ad5f47d3f1373a21496a6c9e0707c622840d0622f23ff7ce08678b020036",
+      "size": 201178
+    },
+    {
+      "name": "pyserial",
+      "version": "3.5",
+      "filename": "pyserial-3.5-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/07/bc/587a445451b253b285629263eb51c2d8e9bcea4fc97826266d186f96f558/pyserial-3.5-py2.py3-none-any.whl",
+      "sha256": "c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0",
+      "size": 90585
+    },
+    {
+      "name": "pyyaml",
+      "version": "6.0.3",
+      "filename": "pyyaml-6.0.3-cp312-cp312-win_amd64.whl",
+      "url": "https://files.pythonhosted.org/packages/86/bf/899e81e4cce32febab4fb42bb97dcdf66bc135272882d1987881a4b519e9/pyyaml-6.0.3-cp312-cp312-win_amd64.whl",
+      "sha256": "5fcd34e47f6e0b794d17de1b4ff496c00986e1c83f7ab2fb8fcfe9616ff7477b",
+      "size": 154003
+    },
+    {
+      "name": "reedsolo",
+      "version": "1.7.0",
+      "filename": "reedsolo-1.7.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/09/19/1bb346c0e581557c88946d2bb979b2bee8992e72314cfb418b5440e383db/reedsolo-1.7.0-py3-none-any.whl",
+      "sha256": "2b6a3e402a1ee3e1eea3f932f81e6c0b7bbc615588074dca1dbbcdeb055002bd",
+      "size": 32360
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2",
+      "filename": "requests-2.34.2-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+      "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0",
+      "size": 73075
+    },
+    {
+      "name": "semantic-version",
+      "version": "2.10.0",
+      "filename": "semantic_version-2.10.0-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/6a/23/8146aad7d88f4fcb3a6218f41a60f6c2d4e3a72de72da1825dc7c8f7877c/semantic_version-2.10.0-py2.py3-none-any.whl",
+      "sha256": "de78a3b8e0feda74cabc54aab2da702113e33ac9d9eb9d2389bcf1f58b7d9177",
+      "size": 15552
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0",
+      "filename": "setuptools-84.0.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/95/9c/c510029fc6ef33a6275cd2c5d3cecd6613dfd6aa401d57c54f1c18852ccf/setuptools-84.0.0-py3-none-any.whl",
+      "sha256": "51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670",
+      "size": 818216
+    },
+    {
+      "name": "six",
+      "version": "1.17.0",
+      "filename": "six-1.17.0-py2.py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+      "sha256": "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+      "size": 11050
+    },
+    {
+      "name": "starlette",
+      "version": "1.6.0",
+      "filename": "starlette-1.6.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/c8/cb/6a6a47d5b464bd08695d254f3da6e7986cc70c9fa5d778eda57538edfe56/starlette-1.6.0-py3-none-any.whl",
+      "sha256": "a86dd39d14bb45f85a3d18525215a9ef0cfd1f192ac793220e72598c90335f0c",
+      "size": 75969
+    },
+    {
+      "name": "tabulate",
+      "version": "0.9.0",
+      "filename": "tabulate-0.9.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/40/44/4a5f08c96eb108af5cb50b41f76142f0afa346dfa99d5296fe7202a11854/tabulate-0.9.0-py3-none-any.whl",
+      "sha256": "024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f",
+      "size": 35252
+    },
+    {
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "size": 45571
+    },
+    {
+      "name": "urllib3",
+      "version": "2.7.0",
+      "filename": "urllib3-2.7.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl",
+      "sha256": "9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897",
+      "size": 131087
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.53.0",
+      "filename": "uvicorn-0.53.0-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/76/18/0eea75741ee812e9f598b687619ce2454f6c3a1c5cd21ea990ec6bd26f45/uvicorn-0.53.0-py3-none-any.whl",
+      "sha256": "e8dca71ec86dce5f04e333f0d56cdedf942446e6643b9cea1af0d6d3a02cb03e",
+      "size": 87081
+    },
+    {
+      "name": "wsproto",
+      "version": "1.3.2",
+      "filename": "wsproto-1.3.2-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/a4/f5/10b68b7b1544245097b2a1b8238f66f2fc6dcaeb24ba5d917f52bd2eed4f/wsproto-1.3.2-py3-none-any.whl",
+      "sha256": "61eea322cdf56e8cc904bd3ad7573359a242ba65688716b0710a5eb12beab584",
+      "size": 24405
+    }
+  ]
+}

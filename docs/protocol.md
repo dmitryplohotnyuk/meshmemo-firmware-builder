@@ -66,7 +66,8 @@ Build ID вычисляется из канонического JSON плана 
 
 Hook по умолчанию остаётся запрещён в PhoneAPI. Его разрешает только SerialConsole
 после обычной protobuf configuration session. Выбор транспорта явный для платы:
-T-Beam S3 Core — native USB CDC, Heltec V3 — console через USB–UART.
+T-Beam S3 Core, Tracker V1.1 и T-LoRa T3-S3 — native USB CDC;
+Heltec V3 и Wireless Stick Lite V3 — console через USB–UART.
 Наличие CP2102 у V3 подтверждено [спецификацией производителя](https://heltec.org/project/wifi-lora-32-v3/);
 этот профиль не относится к Heltec V4.
 Несовпадение CDC-настроек с выбранным transport останавливает компиляцию.

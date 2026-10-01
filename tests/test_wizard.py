@@ -52,6 +52,14 @@ def test_confirmation_default_does_not_start_preparation(tmp_path):
     assert code == 0 and not calls
 
 
+def test_screenless_board_does_not_ask_for_display_options(tmp_path):
+    code, output, calls = session(["1", "3", "да", "1", str(tmp_path / "work"), "1", "да"])
+    assert code == 0 and calls[0][2] == "heltec-wsl-v3"
+    assert "--ua22" in calls[0]
+    assert "--cyrillic" not in calls[0] and "--display-timeout" not in calls[0]
+    assert "Включить экранную кириллицу" not in output and "Включить гашение" not in output
+
+
 @pytest.mark.parametrize("answers", [["q"], ["1", "q"], [], ["1", "1", ""]])
 def test_exit_and_eof_stop_without_side_effects(answers):
     assert session(answers)[0::2] == (130, [])

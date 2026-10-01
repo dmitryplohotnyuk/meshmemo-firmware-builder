@@ -92,7 +92,7 @@
       "status": {
         "prepare": "validated-option-matrix-2026-09-30",
         "build": "usf2-base-offline-2026-09-30",
-        "usb": "not-tested-with-builder",
+        "usb": "validated-windows-linux-reconnect-2026-10-01",
         "radio": "not-tested-with-builder"
       },
       "build_flags": [
@@ -119,6 +119,93 @@
         "usb": "not-tested-with-builder",
         "radio": "not-tested-with-builder"
       }
+    },
+    "heltec-wsl-v3": {
+      "name": "Heltec Wireless Stick Lite V3",
+      "environment": "heltec-wsl-v3",
+      "hardware_model": 44,
+      "architecture": "esp32-s3",
+      "upstreams": [
+        "2.7.26"
+      ],
+      "config": "variants/esp32s3/heltec_wsl_v3/platformio.ini",
+      "flags_anchor": "  -I variants/esp32s3/heltec_wsl_v3",
+      "transport": "usb-uart-console",
+      "display": "none",
+      "supported_options": [
+        "ua22"
+      ],
+      "build_flags": [
+        "MESHMEMO_LOCAL_SERIAL=2"
+      ],
+      "status": {
+        "prepare": "validated-supported-option-matrix-2026-10-01",
+        "build": "base-and-max-options-offline-2026-10-01",
+        "usb": "not-tested-with-builder",
+        "radio": "not-tested-with-builder"
+      },
+      "windows_patches": [
+        {
+          "path": "patches/platform/windows-extra-boards.patch",
+          "sha256": "9619e03835b535ed8515e1a544d5da8fe2ec8e1a0e394d6f1f99e39f8ac0f7f3",
+          "target": "firmware"
+        }
+      ]
+    },
+    "heltec-wireless-tracker": {
+      "name": "Heltec Wireless Tracker V1.1",
+      "environment": "heltec-wireless-tracker",
+      "hardware_model": 48,
+      "architecture": "esp32-s3",
+      "upstreams": [
+        "2.7.26"
+      ],
+      "config": "variants/esp32s3/heltec_wireless_tracker/platformio.ini",
+      "flags_anchor": "  -I variants/esp32s3/heltec_wireless_tracker",
+      "transport": "native-usb-cdc",
+      "display": "tft",
+      "supported_options": [
+        "ua22",
+        "cyrillic",
+        "display-timeout"
+      ],
+      "build_flags": [
+        "MESHMEMO_LOCAL_SERIAL=1"
+      ],
+      "status": {
+        "prepare": "validated-supported-option-matrix-2026-10-01",
+        "build": "base-and-max-options-offline-2026-10-01",
+        "usb": "not-tested-with-builder",
+        "radio": "not-tested-with-builder"
+      }
+    },
+    "tlora-t3s3-v1": {
+      "name": "LILYGO T-LoRa T3-S3",
+      "environment": "tlora-t3s3-v1",
+      "hardware_model": 16,
+      "architecture": "esp32-s3",
+      "upstreams": [
+        "2.7.26"
+      ],
+      "config": "variants/esp32s3/tlora_t3s3_v1/platformio.ini",
+      "flags_anchor": "  -I variants/esp32s3/tlora_t3s3_v1",
+      "transport": "native-usb-cdc",
+      "display": "oled",
+      "supported_options": [
+        "ua22",
+        "cyrillic",
+        "display-timeout"
+      ],
+      "build_flags": [
+        "MESHMEMO_LOCAL_SERIAL=1"
+      ],
+      "status": {
+        "prepare": "validated-supported-option-matrix-2026-10-01",
+        "build": "base-and-max-options-lto-offline-2026-10-01",
+        "usb": "not-tested-with-builder",
+        "radio": "not-tested-with-builder"
+      },
+      "windows_lto": "enabled"
     }
   },
   "profiles": {
@@ -192,6 +279,18 @@
     "heltec-v3:2.7.26": {
       "path": "registry/locks/heltec-v3-2.7.26-windows-amd64.json",
       "sha256": "557b144ede50e6165db85d695237273b0a466df8f3af0386cf0cb77cccb79979"
+    },
+    "heltec-wsl-v3:2.7.26": {
+      "path": "registry/locks/heltec-wsl-v3-2.7.26-windows-amd64.json",
+      "sha256": "ec9ad0e49a78ca06b10c661fcbf7a38cdf5725903cf9248c72f24ebc88110657"
+    },
+    "heltec-wireless-tracker:2.7.26": {
+      "path": "registry/locks/heltec-wireless-tracker-2.7.26-windows-amd64.json",
+      "sha256": "a06458b6cdd5ae225fe66669a106b23cba1b0b6160c9b0efd57349e9e532ca8e"
+    },
+    "tlora-t3s3-v1:2.7.26": {
+      "path": "registry/locks/tlora-t3s3-v1-2.7.26-windows-amd64.json",
+      "sha256": "85b860bc7859165830ba513abcb40a1e2f78ba999511af93489e1e8571a98862"
     }
   }
 }

@@ -44,7 +44,9 @@ meshmemo-builder plan-update --board tbeam-s3-core --backup backups/flash-before
 ```
 
 Для Heltec укажите `--board heltec-v3` и manifest соответствующей сборки.
-Плата задаётся явно: ESP32-S3 chip ID не различает T-Beam и Heltec.
+Плата задаётся явно: ESP32-S3 chip ID не различает зарегистрированные модели.
+Новые профили `heltec-wsl-v3`, `heltec-wireless-tracker` и `tlora-t3s3-v1`
+используют ту же проверку образа, но собственные model/build ID и manifest.
 Имя платы, upstream, профиль, опции и build ID сверяются с реестром сборщика.
 Сам `.bin` должен лежать рядом с manifest; проверяются его размер, SHA-256,
 формат application-only и наличие ожидаемого build ID. Factory-файлы, подписи
