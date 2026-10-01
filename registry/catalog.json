@@ -223,6 +223,10 @@
         "CONTROL",
         "ENCRYPTED_REPLY"
       ]
+    },
+    "patches-only": {
+      "description": "Only explicitly selected optional patches; no MeshMemo protocol or payloads",
+      "build_flags": []
     }
   },
   "options": {

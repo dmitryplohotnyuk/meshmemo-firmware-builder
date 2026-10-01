@@ -93,7 +93,7 @@ def execute_steps(ui, steps, execute):
     return 0
 
 
-def prepare_flow(ui, execute):
+def prepare_flow(ui, execute, profile="meshmemo"):
     board = board_choice(ui)
     catalog = load_catalog()
     hardware = catalog["boards"][board]
@@ -108,7 +108,7 @@ def prepare_flow(ui, execute):
                         ("display-timeout", "Включить гашение экрана по таймеру при USB-подключении")):
         if name in available and ui.yes(label):
             options.append(name)
-    plan = resolve_plan(board, upstream, "meshmemo", options)
+    plan = resolve_plan(board, upstream, profile, options)
     full = ui.choose("Что подготовить", ["Исходники с патчами", "Полную сборку прошивки"], "1") == 1
     if full:
         from .environment import check_host, load_lock
@@ -122,7 +122,7 @@ def prepare_flow(ui, execute):
             path = ui.path(label, "directory")
             source_paths.append(path)
             sources.extend([flag, str(path)])
-    command = ["prepare", "--board", board, "--upstream", upstream, "--profile", "meshmemo",
+    command = ["prepare", "--board", board, "--upstream", upstream, "--profile", profile,
                "--destination", str(workspace)] + [f"--{name}" for name in options] + sources
     steps = [("Подготовка исходников", command)]
     outputs = [workspace]
@@ -140,7 +140,8 @@ def prepare_flow(ui, execute):
     distinct_paths(outputs)
     for source in source_paths:
         distinct_paths([source, *outputs])
-    ui.write(f"\nПлата: {plan['hardware']['name']}. Meshtastic: {upstream}. Профиль MeshMemo: USF2 1/4.")
+    label = "MeshMemo: USF2 1/4" if profile == "meshmemo" else "Только выбранные патчи, без MeshMemo"
+    ui.write(f"\nПлата: {plan['hardware']['name']}. Meshtastic: {upstream}. {label}.")
     ui.write("Дополнительные опции: " + (", ".join(options) if options else "выключены"))
     ui.write(f"Исходники: {workspace}")
     if not local:
@@ -163,6 +164,7 @@ def build_flow(ui, execute):
     distinct_paths([workspace, runtime, output])
     jobs = ui.jobs()
     ui.write(f"\nПлата: {prepared['plan']['board']}. Опции: {', '.join(prepared['plan']['options']) or 'выключены'}.")
+    ui.write(f"Профиль: {prepared['plan']['profile']}.")
     ui.write(f"Результат: {output}")
     if not ui.yes("Начать компиляцию"):
         ui.write("Отменено. Компиляция не запускалась.")
@@ -171,7 +173,7 @@ def build_flow(ui, execute):
                                               "--output", str(output), "--jobs", jobs])], execute)
 
 
-def release_flow(ui, execute):
+def release_flow(ui, execute, profile="meshmemo"):
     board = board_choice(ui)
     channel = ("stable", "preview")[ui.choose("Канал Meshtastic", ["Стабильный", "Предварительный (preview)"], "1")]
     tag = ui.ask("Точный тег релиза или latest для самого свежего в выбранном канале", "latest")
@@ -184,6 +186,8 @@ def release_flow(ui, execute):
             options.append(name)
     workspace = ui.path("Новая папка исходников релиза", "new", ".work/new-release")
     ui.write(f"\nПлата: {board}. Канал: {channel}. Релиз: {tag}.")
+    if profile == "patches-only":
+        ui.write("Только выбранные патчи, без MeshMemo.")
     ui.write("Дополнительные опции: " + (", ".join(options) or "выключены"))
     ui.write("Релиз будет получен из официального репозитория и закреплён по коммиту.")
     ui.write("Результаты применения патчей и проверки зависимостей сохраняются в release.json.")
@@ -193,7 +197,7 @@ def release_flow(ui, execute):
         ui.write("Отменено. Загрузка не запускалась.")
         return 0
     return execute_steps(ui, [("Получение и патчинг релиза", ["prepare-release", "--board", board,
-        "--release", tag, "--channel", channel, "--destination", str(workspace)]
+        "--release", tag, "--channel", channel, "--destination", str(workspace), "--profile", profile]
         + [f"--{name}" for name in options])], execute)
 
 
@@ -261,13 +265,16 @@ def run(*, reader=None, writer=None, execute=None):
     try:
         task = ui.choose("Выберите действие", ["Подготовить новую прошивку", "Проверить обновление по flash-копии",
             "Создать пакет восстановления", "Проверить пакет восстановления", "Собрать подготовленные исходники",
-            "Получить свежий релиз и применить патчи", "Выйти"])
+            "Получить свежий релиз и применить патчи", "Только дополнительные патчи (без MeshMemo)", "Выйти"])
         if task == 0: return prepare_flow(ui, execute)
         if task == 1: return update_flow(ui)
         if task == 2: return recovery_flow(ui)
         if task == 3: return verify_flow(ui)
         if task == 4: return build_flow(ui, execute)
         if task == 5: return release_flow(ui, execute)
+        if task == 6:
+            source = ui.choose("Версия прошивки", ["Закреплённая версия", "Свежий опубликованный релиз"], "1")
+            return (prepare_flow if source == 0 else release_flow)(ui, execute, profile="patches-only")
         return 0
     except (Cancelled, EOFError, KeyboardInterrupt):
         ui.write("\nМастер остановлен. Завершённые результаты и журналы сохранены; новые этапы не запускаются.")

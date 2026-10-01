@@ -80,7 +80,7 @@ def test_exit_and_eof_stop_without_side_effects(answers):
 
 
 def test_invalid_answers_are_reprompted():
-    code, output, calls = session(["", "-1", "99999999999999999999999999999999999999", "foo", "7"])
+    code, output, calls = session(["", "-1", "99999999999999999999999999999999999999", "foo", "8"])
     assert code == 0 and not calls
     assert output.count("Введите номер") == 4
 

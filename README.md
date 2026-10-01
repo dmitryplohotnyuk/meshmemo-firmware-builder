@@ -1,8 +1,8 @@
 # MeshMemo Firmware Builder
 
-CLI для подготовки и сборки Meshtastic с расширением MeshMemo.
+CLI для подготовки и сборки Meshtastic с MeshMemo или только выбранными дополнительными патчами.
 **Пять профилей ESP32-S3, Meshtastic 2.7.26**, протокол USF2, профиль 1/4.
-Требуется [MeshMemo server](https://github.com/dmitryplohotnyuk/meshmemo)
+Для профиля MeshMemo требуется [MeshMemo server](https://github.com/dmitryplohotnyuk/meshmemo)
 **0.1.0a8+**; сервер обновляется первым. Другие платы пока отклоняются.
 Свежие релизы можно получать и проверять через `prepare-release`; неизвестная
 версия остаётся экспериментальной. Сборщик работает с закреплёнными коммитами.
@@ -39,14 +39,40 @@ CLI для подготовки и сборки Meshtastic с расширени
 OLEDDisplay-рендереру (включая TFT Tracker),
 а UTF-8-сообщения доступны и без неё. UA22 не меняет выбранный на устройстве регион.
 
-Базовый профиль включает USB handshake, replay, исправление USB polling и
+Базовый профиль `meshmemo` включает USB handshake, replay, исправление USB polling и
 server-channel replies. Windows LTO workaround выбирается отдельно через
-`--windows-workaround auto|on|off`; `auto` включает его на Windows. Он не включает
+`--windows-workaround auto|on|off`; `auto` включает его на Windows для профиля MeshMemo. Он не включает
 ни одну из трёх пользовательских опций.
+
+## Только UA22 или кириллица, без MeshMemo
+
+Выберите `--profile patches-only`. Примеры подготовки исходников:
+
+```sh
+meshmemo-builder prepare --board tbeam-s3-core --profile patches-only --ua22 --destination .work/ua22-only
+meshmemo-builder prepare --board tbeam-s3-core --profile patches-only --cyrillic --destination .work/cyrillic-only
+```
+
+Можно указать оба флага вместе; таймер экрана тоже выбирается независимо.
+Без флагов получится исходная прошивка без пользовательских патчей. В этом
+профиле нет USB-моста, replay, server-channel replies, изменения protobufs,
+MeshMemo payloads или встроенного MeshMemo build ID. Сервер MeshMemo не требуется
+и его прошивочный протокол в таком образе недоступен.
+
+В мастере есть пункт «Только дополнительные патчи (без MeshMemo)» с выбором
+закреплённой версии или свежего релиза. Для `prepare-release` также работает
+`--profile patches-only`. Ограничения плат и проверка совместимости остаются.
+
+В `patches-only` режим `--windows-workaround auto` оставляет служебные патчи
+выключенными даже на Windows. При необходимости их можно отдельно включить
+через `--windows-workaround on`; это меняет настройки сборки, не добавляя
+MeshMemo. Команды `fetch-dependencies`, `bootstrap`, `build` остаются прежними.
+Планировщик обновления MeshMemo не принимает такие образы: в них нет встроенного
+идентификатора, связывающего образ с планом MeshMemo. Сборщик сам плату не прошивает.
 
 У T-LoRa T3-S3 сохраняется штатная **LTO-оптимизация**, в том числе при
 `--windows-workaround auto|on`: вариант без неё не помещается в штатный раздел
-приложения. Остальные профили используют прежний Windows workaround.
+приложения. При включённом workaround остальные платы используют прежние настройки Windows.
 Настройки существующих T-Beam и Heltec V3 не изменены.
 
 ## Установка и просмотр

@@ -145,7 +145,8 @@ def baseline_inputs(base, root=None):
         raise BuilderError(f"Missing or invalid release baseline: {base}") from exc
 
 
-def resolve_release_plan(board, release, options=(), windows_workaround=None, base="2.7.26", root=None):
+def resolve_release_plan(board, release, options=(), windows_workaround=None, base="2.7.26", root=None,
+                         profile="meshmemo"):
     """Reconstruct only from known assets plus pinned official-source identities."""
     root = root or data_root()
     required = {"tag", "firmware_commit", "protobuf_commit", "build_inputs_sha256", "base"}
@@ -156,7 +157,7 @@ def resolve_release_plan(board, release, options=(), windows_workaround=None, ba
             or not isinstance(release["build_inputs_sha256"], str)
             or not re.fullmatch(r"[0-9a-f]{64}", release["build_inputs_sha256"])):
         raise BuilderError("Invalid pinned release identity")
-    plan = deepcopy(resolve_plan(board, base, "meshmemo", options, windows_workaround, root))
+    plan = deepcopy(resolve_plan(board, base, profile, options, windows_workaround, root))
     baseline = baseline_inputs(base, root)
     plan["upstream"] = release["tag"]
     plan["release"] = dict(release)
@@ -186,17 +187,17 @@ def validate_sources(plan, firmware):
 
 def prepare_release(destination, board="tbeam-s3-core", release="latest", channel="stable",
                     options=(), windows_workaround=None, base="2.7.26",
-                    firmware_source=None, protobuf_source=None):
+                    firmware_source=None, protobuf_source=None, profile="meshmemo"):
     # Resolve board/options before any network access. Existing directories never
     # become scratch space, even if discovery or an earlier attempt failed.
-    template = resolve_plan(board, base, "meshmemo", options, windows_workaround)
+    template = resolve_plan(board, base, profile, options, windows_workaround)
     destination = destination.resolve()
     if destination.exists() or destination.is_symlink():
         raise BuilderError("Destination already exists; choose a new directory")
     selected = select_release(release, channel)
     destination.mkdir(parents=True, exist_ok=False)
     report = {"schema_version": 1, "status": "checking", "release": selected,
-              "board": board, "options": template["options"], "base": base,
+              "board": board, "profile": profile, "options": template["options"], "base": base,
               "patches": [{"path": item["path"], "target": item["target"], "status": "not-run"}
                           for item in template["patches"]],
               "build": "not-run", "hardware": "not-tested"}
@@ -228,8 +229,8 @@ def prepare_release(destination, board="tbeam-s3-core", release="latest", channe
                       if item["firmware"]["commit"] == pinned["firmware_commit"]
                       and item["protobufs"]["commit"] == pinned["protobuf_commit"]
                       and key in template["hardware"]["upstreams"]), None)
-        plan = (resolve_plan(board, known, "meshmemo", options, windows_workaround) if known
-                else resolve_release_plan(board, pinned, options, windows_workaround, base))
+        plan = (resolve_plan(board, known, profile, options, windows_workaround) if known
+                else resolve_release_plan(board, pinned, options, windows_workaround, base, profile=profile))
         report["registered_upstream"] = known
         report["pinned"] = pinned
         report["patches"] = [{"path": item["path"], "target": item["target"], "status": "not-run"}

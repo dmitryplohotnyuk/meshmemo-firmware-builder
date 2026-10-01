@@ -92,8 +92,11 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
     for repository in ("firmware", "protobufs"):
         if not re.fullmatch(r"[0-9a-f]{40}", base[repository]["commit"]):
             raise BuilderError(f"Unpinned {repository} commit")
-    windows = os.name == "nt" if windows_workaround is None else windows_workaround
-    patches = list(base["patches"])
+    meshmemo = profile == "meshmemo"
+    if not meshmemo:
+        hardware = {**hardware, "status": {key: "not-tested-patches-only" for key in ("prepare", "build", "usb", "radio")}}
+    windows = (os.name == "nt" and meshmemo) if windows_workaround is None else windows_workaround
+    patches = list(base["patches"]) if meshmemo else []
     flags = []
     for option in selected:
         patches.extend(catalog["options"][option]["patches"])
@@ -102,14 +105,15 @@ def resolve_plan(board="tbeam-s3-core", upstream="2.7.26", profile="meshmemo",
         patches.extend(catalog["windows_workaround"]["patches"])
         patches.extend(hardware.get("windows_patches", []))
     flags.extend(selected_profile["build_flags"])
-    flags.extend(hardware.get("build_flags", []))
+    if meshmemo:
+        flags.extend(hardware.get("build_flags", []))
     plan = {
         "schema_version": 1, "builder_version": __version__, "board": board,
         "upstream": upstream, "profile": profile, "options": selected,
         "windows_workaround": windows, "hardware": hardware,
         "protocol": selected_profile, "firmware": base["firmware"],
         "protobufs": base["protobufs"], "platformio_version": base["platformio_version"],
-        "patches": patches, "copies": base["copies"], "build_flags": flags,
+        "patches": patches, "copies": base["copies"] if meshmemo else [], "build_flags": flags,
         "dependency_lock": catalog["dependency_locks"].get(f"{board}:{upstream}"),
     }
     verify_assets(plan, root)
@@ -127,7 +131,7 @@ def resolve_saved_plan(plan: dict) -> dict:
     if "release" in plan:
         from .releases import resolve_release_plan
         return resolve_release_plan(plan["board"], plan["release"], plan["options"],
-                                    plan["windows_workaround"], plan["release"]["base"])
+                                    plan["windows_workaround"], plan["release"]["base"], profile=plan["profile"])
     return resolve_plan(plan["board"], plan["upstream"], plan["profile"],
                         plan["options"], plan["windows_workaround"])
 
@@ -191,11 +195,15 @@ def apply_plan(plan: dict, firmware: Path, root: Path | None = None, patch_progr
     lines = content.splitlines()
     if lines.count(anchor) != 1:
         raise BuilderError("Board build flag anchor does not match the pinned configuration")
+    if not plan["build_flags"]:
+        return
     if not all(re.fullmatch(r"[A-Z_0-9]+=[A-Za-z_0-9]+", flag) for flag in plan["build_flags"]):
         raise BuilderError("Invalid build flag in registry")
     at = lines.index(anchor) + 1
     lines[at:at] = [f"  -D {flag}" for flag in plan["build_flags"]]
     config.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    if plan["profile"] != "meshmemo":
+        return
     build_header = firmware / "src/mesh/UsbSfBuild.h"
     if build_header.exists():
         raise BuilderError("Refusing to overwrite an existing build identity header")

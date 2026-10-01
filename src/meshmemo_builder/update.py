@@ -182,6 +182,8 @@ def candidate(manifest: Path, board: str) -> tuple[dict, dict]:
             return {**value, "hardware": {k: v for k, v in value["hardware"].items() if k != "status"}}
         if inputs(plan) != inputs(expected):
             raise BuilderError("Build plan/build ID differs from the installed registry")
+        if plan["profile"] != "meshmemo":
+            raise BuilderError("The MeshMemo update planner requires a MeshMemo image with an embedded build ID; patches-only has no bridge or embedded identity")
         name = report["artifact"]
         if not isinstance(name, str) or Path(name).name != name:
             raise BuilderError("Application artifact must be a filename beside its manifest")

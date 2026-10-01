@@ -23,6 +23,18 @@ meshmemo-builder prepare-release --board heltec-v3 --channel preview --release l
 `--display-timeout`. Ограничения опций платы сохраняются. В мастере есть пункт
 «Получить свежий релиз и применить патчи».
 
+Для применения только выбранных опций используйте `--profile patches-only`:
+
+```sh
+meshmemo-builder prepare-release --board tbeam-s3-core --profile patches-only --cyrillic --destination .work/fresh-cyrillic
+```
+
+Патчи MeshMemo, его payloads, флаги и идентификатор в исходники не добавляются.
+Windows workaround по умолчанию выключен. Конфликт проверяется только для
+выбранных патчей. Для точного preview `v2.8.0.47db0e3` отдельно проверено:
+кириллица применяется, UA22 конфликтует с изменённым `RadioInterface.cpp`.
+Сборка 2.8.0 по-прежнему требует нового lock зависимостей.
+
 Через `--firmware-source` и `--protobuf-source` можно использовать локальные
 Git-репозитории. Выбор опубликованного релиза всё равно проверяется через GitHub;
 локальный firmware должен содержать тег и коммит, protobufs — коммит подмодуля.
@@ -73,7 +85,9 @@ meshmemo-builder build --workspace .work/fresh-stable --runtime .work/rt-fresh -
 Совпадение с зарегистрированными firmware/protobufs сохраняет прежний план и
 build ID. Новый релиз получает экспериментальный план и build ID, включающий
 коммиты, набор патчей и отпечаток входов сборки. HELLO сообщает фактический
-firmware SHA. Совместимый lock означает возможность попытки сборки; успешная
+firmware SHA в профиле MeshMemo. В `patches-only` build ID существует только
+в manifest и не встраивается в прошивку; HELLO MeshMemo отсутствует.
+Совместимый lock означает возможность попытки сборки; успешная
 компиляция не подтверждает USB, радио и экран. `plan-update` блокирует предложение
 записи экспериментального релиза до включения проверенного профиля в каталог.
 

@@ -87,7 +87,7 @@ def build(workspace: Path, runtime: Path, output: Path, jobs=4) -> Path:
         raise BuilderError("Jobs must be positive")
     state = read_prepared(workspace)
     plan = state["plan"]
-    if os.name == "nt" and not plan["windows_workaround"]:
+    if os.name == "nt" and plan["profile"] == "meshmemo" and not plan["windows_workaround"]:
         raise BuilderError("Prepare with Windows workaround before compiling on Windows")
     if output.exists():
         raise BuilderError("Output directory already exists; choose a new directory")
@@ -136,6 +136,8 @@ def build(workspace: Path, runtime: Path, output: Path, jobs=4) -> Path:
         shutil.copyfile(image, output / image.name)
         report.update({
             "status": "built", "artifact": image.name, "artifact_kind": "application-only",
+            "meshmemo_enabled": plan["profile"] == "meshmemo",
+            "build_id_embedded": plan["profile"] == "meshmemo",
             "sha256": sha256(image), "size_bytes": size, "build_partition": partition,
             "remaining_partition_bytes": partition["size"] - size,
             "platformio_version": plan["platformio_version"],

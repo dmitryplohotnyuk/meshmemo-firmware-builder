@@ -53,7 +53,8 @@ def parser() -> argparse.ArgumentParser:
             sub.add_argument("--base", default="2.7.26", help="Installed patch baseline")
         else:
             sub.add_argument("--upstream", default="2.7.26")
-        sub.add_argument("--profile", default="meshmemo")
+        sub.add_argument("--profile", choices=("meshmemo", "patches-only"), default="meshmemo",
+                         help="patches-only applies selected options without the MeshMemo bridge")
         sub.add_argument("--ua22", action="store_true", help="Opt in to custom UA_433 22 dBm ceiling")
         sub.add_argument("--cyrillic", action="store_true", help="Enable OLED_UA and glyph correction")
         sub.add_argument("--display-timeout", action="store_true", help="Allow display timeout during USB sessions")
@@ -122,10 +123,8 @@ def main(argv=None) -> int:
             windows = {"auto": None, "on": True, "off": False}[args.windows_workaround]
             if args.command == "prepare-release":
                 from .releases import prepare_release
-                if args.profile != "meshmemo":
-                    raise BuilderError("Unknown profile")
                 path = prepare_release(args.destination, args.board, args.release, args.channel, options,
-                                       windows, args.base, args.firmware_source, args.protobuf_source)
+                                       windows, args.base, args.firmware_source, args.protobuf_source, args.profile)
                 print(f"Release sources patched. Manifest: {path}. Compatibility report: {path.parent / 'release.json'}")
                 report = json.loads((path.parent / "release.json").read_text(encoding="utf-8"))
                 if not report["build_ready"]:
