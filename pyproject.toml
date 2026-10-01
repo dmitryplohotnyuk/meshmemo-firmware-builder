@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "meshmemo-firmware-builder"
+version = "0.1.0a2"
+description = "Prepare pinned MeshMemo firmware with independent optional patches"
+readme = "README.md"
+license = "GPL-3.0-only"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/*.txt"]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+meshmemo-builder = "meshmemo_builder.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "build>=1,<2"]
+
+[project.urls]
+Repository = "https://github.com/dmitryplohotnyuk/meshmemo-firmware-builder"
+Issues = "https://github.com/dmitryplohotnyuk/meshmemo-firmware-builder/issues"
+MeshMemo = "https://github.com/dmitryplohotnyuk/meshmemo"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/meshmemo_builder"]
+
+[tool.hatch.build.targets.wheel.force-include]
+registry = "meshmemo_builder/data/registry"
+patches = "meshmemo_builder/data/patches"
+payloads = "meshmemo_builder/data/payloads"
+licenses = "meshmemo_builder/data/licenses"
+"docs/provenance.json" = "meshmemo_builder/data/provenance.json"
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/registry", "/patches", "/payloads", "/licenses", "/tests", "/scripts", "/docs", "/README.md", "/LICENSE", "/THIRD_PARTY_NOTICES.md", "/pyproject.toml", "/.gitignore", "/.gitattributes", "/.editorconfig"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

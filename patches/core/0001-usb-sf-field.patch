@@ -1,0 +1,33 @@
+diff --git a/meshtastic/mesh.options b/meshtastic/mesh.options
+index 7d3f8fe..253df84 100644
+--- a/meshtastic/mesh.options
++++ b/meshtastic/mesh.options
+@@ -102,3 +102,6 @@
+ # Longest documented value is "token_wrong_size" (16 chars); 32 leaves room
+ # for future short reasons without forcing nanopb to use callbacks.
+ *LockdownStatus.lock_reason max_size:32
++
++*ToRadio.usb_sf max_size:256
++*FromRadio.usb_sf max_size:256
+diff --git a/meshtastic/mesh.proto b/meshtastic/mesh.proto
+index 2e4b1b1..a4ded23 100644
+--- a/meshtastic/mesh.proto
++++ b/meshtastic/mesh.proto
+@@ -2206,6 +2206,8 @@ message FromRadio {
+    * Log levels, chosen to match python logging conventions.
+    */
+   oneof payload_variant {
++    // Experimental local USB diagnostics; never a mesh application payload.
++    bytes usb_sf = 100;
+     /*
+      * Log levels, chosen to match python logging conventions.
+      */
+@@ -2459,6 +2461,8 @@ message ToRadio {
+    * Log levels, chosen to match python logging conventions.
+    */
+   oneof payload_variant {
++    // Experimental local USB diagnostics; never a mesh application payload.
++    bytes usb_sf = 100;
+     /*
+      * Send this packet on the mesh
+      */

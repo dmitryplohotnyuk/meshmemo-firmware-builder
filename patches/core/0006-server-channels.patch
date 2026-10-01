@@ -1,0 +1,24 @@
+--- a/src/mesh/UsbSfBridge.cpp
++++ b/src/mesh/UsbSfBridge.cpp
+@@ -27,7 +27,7 @@
+   if (replayProfile) {
+     reply[16] = 192;
+     reply[18] = 1;
+-    reply[19] = 2;
++    reply[19] = 3;
+   }
+   memcpy(reply + 28, "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb", 40);
+   pending = true;
+@@ -84,6 +84,12 @@
+     if (size > 44 && size <= 144 && read32(data + 16) && read32(data + 20) < 8 && read32(data + 24))
+       status = sender(data, size);
+   }
++  if (data[4] == 5 && sender) {
++    status = 1;
++    if (size > 48 && size <= 256 && read32(data + 16) && read32(data + 16) != UINT32_MAX &&
++        read32(data + 20) && read32(data + 20) != UINT32_MAX && read32(data + 24) && read32(data + 28) <= 255)
++      status = sender(data, size);
++  }
+   respond(data, status);
+   token = incomingToken;
+   lastSize = size;

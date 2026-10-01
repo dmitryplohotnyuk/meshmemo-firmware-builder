@@ -1,0 +1,72 @@
+--- a/src/mesh/UsbSfBridge.cpp
++++ b/src/mesh/UsbSfBridge.cpp
+@@ -1,4 +1,10 @@
++#include "configuration.h"
+ #include "UsbSfBridge.h"
++#include "UsbSfBuild.h"
++#include "UsbSfTransport.h"
++
++static_assert(HW_VENDOR == USB_SF_EXPECTED_MODEL, "Registry model does not match firmware");
++static_assert(usbSfLocalTransportAllowed(), "Unsupported MeshMemo serial transport");
+ #include <cstring>
+ 
+ namespace {
+@@ -17,19 +23,26 @@
+ void UsbSfBridge::respond(const uint8_t *request, uint8_t status) {
+   memset(reply, 0, sizeof(reply));
+   memcpy(reply, request, 16);
++  memcpy(reply, "USF2", 4);
+   reply[4] |= 0x80;
+   reply[5] = status;
+   reply[6] = reply[7] = 0;
+   // Profile 0 advertises diagnostics only; no replay path or radio queue
+   // exists.
+-  reply[19] = 1;
+-  reply[20] = 12;
++  reply[19] = 4;
++  for (unsigned i = 0; i < 4; ++i) reply[20 + i] = (uint32_t(HW_VENDOR) >> (8 * i)) & 255;
+   if (replayProfile) {
+     reply[16] = 192;
+     reply[18] = 1;
+-    reply[19] = 3;
++
+   }
+   memcpy(reply + 28, "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb", 40);
++  reply[68] = replayProfile ? 31 : 5;
++  reply[73] = 1; // uint16 max request = 256
++  reply[74] = replayProfile ? 100 : 0;
++  reply[76] = replayProfile ? 208 : 0;
++  reply[78] = MESHMEMO_LOCAL_SERIAL;
++  memcpy(reply + 80, USB_SF_BUILD_ID, 32);
+   pending = true;
+ }
+ 
+--- a/src/mesh/UsbSfBridge.h
++++ b/src/mesh/UsbSfBridge.h
+@@ -5,7 +5,7 @@
+ 
+ class UsbSfBridge {
+ public:
+-  static constexpr size_t RESPONSE_SIZE = 68;
++  static constexpr size_t RESPONSE_SIZE = 112;
+   void reset();
+   using Sender = uint8_t (*)(const uint8_t *, size_t);
+   void handle(const uint8_t *data, size_t size, Sender sender = nullptr);
+--- a/src/SerialConsole.cpp
++++ b/src/SerialConsole.cpp
+@@ -29,13 +29,10 @@
+ SerialConsole *console;
+ 
+ #ifdef MESHTASTIC_USB_SF_BRIDGE
++#include "mesh/UsbSfTransport.h"
+ bool SerialConsole::supportsUsbSfBridge() const
+ {
+-#if defined(IS_USB_SERIAL) && !defined(USER_DEBUG_PORT) && !defined(RP2040_SLOW_CLOCK)
+-    return true;
+-#else
+-    return false;
+-#endif
++    return usbSfLocalTransportAllowed();
+ }
+ #endif
+ 

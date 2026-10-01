@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "upstreams": {
+    "2.7.26": {
+      "firmware": {
+        "url": "https://github.com/meshtastic/firmware.git",
+        "commit": "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb"
+      },
+      "protobufs": {
+        "url": "https://github.com/meshtastic/protobufs.git",
+        "commit": "6b1ded439633cd03d4af85b44231b91d1d106278"
+      },
+      "platformio_version": "6.2.0",
+      "patches": [
+        {
+          "path": "patches/core/0001-usb-sf-field.patch",
+          "sha256": "4fa37dded21558e61ead946a57c546e22ab72cc27f24ebf3a8472bef0059a402",
+          "target": "protobufs"
+        },
+        {
+          "path": "patches/core/0002-usb-diagnostics.patch",
+          "sha256": "f297495ffeeade61ac4fa14251a2c72d643eeecdb039c518ece741882be02ad8",
+          "target": "firmware"
+        },
+        {
+          "path": "patches/core/0003-usb-replay.patch",
+          "sha256": "5981aaaacbf1eb1faf801e1f7720fbab55c4c0e13f0556751590286c79f13497",
+          "target": "firmware"
+        },
+        {
+          "path": "patches/platform/usb-poll.patch",
+          "sha256": "048cc26186afae851f73a1f4d732d1ad0a704627589ea9629cdeabb358c008b7",
+          "target": "firmware"
+        },
+        {
+          "path": "patches/core/0006-server-channels.patch",
+          "sha256": "3ed71d6f036e35019ebeaa3005c5809a1ebf67c99a027c4abcaecb80f87b285a",
+          "target": "firmware"
+        },
+        {
+          "path": "patches/core/0007-portable-capabilities.patch",
+          "sha256": "189eaad27d8c4f8699b2995a08ecaf254b069c93c42cd41bafaebc6afbbcfebe",
+          "target": "firmware"
+        }
+      ],
+      "copies": [
+        {
+          "path": "payloads/replay/UsbSfPayload.h",
+          "sha256": "d0c9902dc020ea635ccd8de4c19c9b86b328b6a8701f8995953f53b265abc4ed",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfPayload.h"
+        },
+        {
+          "path": "payloads/replay/UsbSfRadio.cpp",
+          "sha256": "e33e99293ad440d8f8df9985677796940e49086c4e415ee0bd8dd32cea15810b",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfRadio.cpp"
+        },
+        {
+          "path": "payloads/replay/UsbSfRadio.h",
+          "sha256": "75c4b8ee604788227999081cde6c2e4c43bd867708081e8251201a7b125ac38c",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfRadio.h"
+        },
+        {
+          "path": "payloads/portable/UsbSfTransport.h",
+          "sha256": "ad822ff5f9b22881bafad039744d52f082270b544bc660197c5a59a79fc9837b",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfTransport.h"
+        },
+        {
+          "path": "payloads/portable/UsbSfSha256.h",
+          "sha256": "d90c0e0ab235d5ca31a6757165868b1ac2919156f5474b005ffe8a45b077e50a",
+          "target": "firmware",
+          "destination": "src/mesh/UsbSfSha256.h"
+        }
+      ]
+    }
+  },
+  "boards": {
+    "tbeam-s3-core": {
+      "name": "LILYGO T-Beam S3 Core",
+      "environment": "tbeam-s3-core",
+      "hardware_model": 12,
+      "architecture": "esp32-s3",
+      "upstreams": [
+        "2.7.26"
+      ],
+      "config": "variants/esp32s3/tbeam-s3-core/platformio.ini",
+      "flags_anchor": "  -I variants/esp32s3/tbeam-s3-core",
+      "transport": "native-usb-cdc",
+      "status": {
+        "prepare": "validated-option-matrix-2026-09-30",
+        "build": "usf2-base-offline-2026-09-30",
+        "usb": "not-tested-with-builder",
+        "radio": "not-tested-with-builder"
+      },
+      "build_flags": [
+        "MESHMEMO_LOCAL_SERIAL=1"
+      ]
+    },
+    "heltec-v3": {
+      "name": "Heltec WiFi LoRa 32 V3",
+      "environment": "heltec-v3",
+      "hardware_model": 43,
+      "architecture": "esp32-s3",
+      "upstreams": [
+        "2.7.26"
+      ],
+      "config": "variants/esp32s3/heltec_v3/platformio.ini",
+      "flags_anchor": "  -I variants/esp32s3/heltec_v3",
+      "transport": "usb-uart-console",
+      "build_flags": [
+        "MESHMEMO_LOCAL_SERIAL=2"
+      ],
+      "status": {
+        "prepare": "validated-option-matrix-2026-09-30",
+        "build": "usf2-base-offline-2026-09-30",
+        "usb": "not-tested-with-builder",
+        "radio": "not-tested-with-builder"
+      }
+    }
+  },
+  "profiles": {
+    "meshmemo": {
+      "profile": 1,
+      "patch_revision": 4,
+      "build_flags": [
+        "MESHTASTIC_USB_SF_BRIDGE=1"
+      ],
+      "protocol_version": 2,
+      "operations": [
+        "HELLO",
+        "REPLAY",
+        "ABORT",
+        "CONTROL",
+        "ENCRYPTED_REPLY"
+      ]
+    }
+  },
+  "options": {
+    "ua22": {
+      "description": "UA_433 custom TX power ceiling 22 dBm",
+      "patches": [
+        {
+          "path": "patches/optional/ua22.patch",
+          "sha256": "99ef8f38b59db280b1499c1dbda25df7f35af857c0da5ac3dbfc9d66c9d90ca1",
+          "target": "firmware"
+        }
+      ],
+      "build_flags": []
+    },
+    "cyrillic": {
+      "description": "OLED_UA and Ukrainian UTF-8 glyph correction",
+      "patches": [
+        {
+          "path": "patches/optional/cyrillic.patch",
+          "sha256": "8b38167ff3aa2b072ab7fb8ceda50e8702fba48a0d7910fc1a0abb4012b4d052",
+          "target": "firmware"
+        }
+      ],
+      "build_flags": [
+        "OLED_UA=1"
+      ]
+    },
+    "display-timeout": {
+      "description": "Display timeout while USB serial remains active; does not disable the display",
+      "patches": [
+        {
+          "path": "patches/optional/display-timeout.patch",
+          "sha256": "799e3a14b2a07950fd47670f048aba475446cd222187d46b3d4c53121e0d560c",
+          "target": "firmware"
+        }
+      ],
+      "build_flags": []
+    }
+  },
+  "windows_workaround": {
+    "patches": [
+      {
+        "path": "patches/platform/windows-build.patch",
+        "sha256": "7d64daa5dfc03e57f5148789c57b6940ea33acb206d77093655db90c3d37f6e8",
+        "target": "firmware"
+      }
+    ]
+  },
+  "dependency_locks": {
+    "tbeam-s3-core:2.7.26": {
+      "path": "registry/locks/tbeam-s3-core-2.7.26-windows-amd64.json",
+      "sha256": "6dd0bf0a03849576095171959c824bd24e66bf8a6ba70e1d7efaa8fa191971a5"
+    },
+    "heltec-v3:2.7.26": {
+      "path": "registry/locks/heltec-v3-2.7.26-windows-amd64.json",
+      "sha256": "557b144ede50e6165db85d695237273b0a466df8f3af0386cf0cb77cccb79979"
+    }
+  }
+}

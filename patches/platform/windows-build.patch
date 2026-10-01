@@ -1,0 +1,49 @@
+diff --git a/platformio.ini b/platformio.ini
+index 4560bfa..72a601c 100644
+--- a/platformio.ini
++++ b/platformio.ini
+@@ -9,6 +9,7 @@ extra_configs =
+ 	variants/*/*/platformio.ini
+ 	variants/*/diy/*/platformio.ini
+ 	src/graphics/niche/InkHUD/PlatformioConfig.ini
++	windows-build.ini
+ 
+ description = Meshtastic
+ 
+--- /dev/null
++++ b/windows-build.ini
+@@ -0,0 +1,23 @@
++[env:heltec-wireless-tracker]
++build_unflags =
++  ${esp32_common.build_unflags}
++  -flto
++extra_scripts =
++  ${esp32_common.extra_scripts}
++  extra_scripts/windows_lto.py
++
++[env:tbeam-s3-core]
++build_unflags =
++  ${esp32_common.build_unflags}
++  -flto
++extra_scripts =
++  ${esp32_common.extra_scripts}
++  extra_scripts/windows_lto.py
++
++[env:heltec-v3]
++build_unflags =
++  ${esp32_common.build_unflags}
++  -flto
++extra_scripts =
++  ${esp32_common.extra_scripts}
++  extra_scripts/windows_lto.py
+--- /dev/null
++++ b/extra_scripts/windows_lto.py
+@@ -0,0 +1,8 @@
++import os
++
++Import("env")
++
++# GCC 8 LTO subprocesses exceed Windows CreateProcess command limits.
++if os.name == "nt":
++    env.ProcessUnFlags("-flto")
++    env.Append(LINKFLAGS=["-fno-lto"])

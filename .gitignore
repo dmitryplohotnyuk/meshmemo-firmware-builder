@@ -1,0 +1,45 @@
+# Python and tooling
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Upstream checkouts, toolchains, builds and release artifacts
+.work/
+.cache/
+.build/
+.pio/
+.platformio/
+build/
+dist/
+artifacts/
+*.bin
+*.elf
+*.hex
+*.uf2
+*.map
+*.zip
+*.tar.gz
+*.log
+
+# Local device configuration, backups and secrets
+.env
+.env.*
+!.env.example
+local/
+backups/
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

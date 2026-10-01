@@ -1,0 +1,15 @@
+--- a/src/SerialConsole.cpp
++++ b/src/SerialConsole.cpp
+@@ -100,6 +100,12 @@
+ #endif
+ 
+     int32_t delay = runOncePart();
++#if defined(MESHTASTIC_USB_SF_BRIDGE) && defined(IS_USB_SERIAL)
++    // TinyUSB CDC can be active while HWCDC::isPlugged() is false. Keep an
++    // established protobuf session responsive instead of sleeping for 20 seconds.
++    if (usingProtobufs && checkIsConnected())
++        return delay;
++#endif
+ #if defined(SERIAL_HAS_ON_RECEIVE) || defined(CONFIG_IDF_TARGET_ESP32S2)
+     return Port.available() ? delay : INT32_MAX;
+ #elif defined(IS_USB_SERIAL)

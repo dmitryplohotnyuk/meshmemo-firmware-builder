@@ -1,0 +1,66 @@
+--- a/src/PowerFSM.cpp
++++ b/src/PowerFSM.cpp
+@@ -182,12 +182,35 @@
+         screen->setOn(false);
+ }
+ 
++// Keep the serial power state active while allowing the display to time out.
++static uint32_t serialScreenOnAt;
++static bool serialScreenBlanked;
++
+ static void serialEnter()
+ {
+     LOG_POWERFSM("State: serialEnter");
++    serialScreenOnAt = millis();
++    serialScreenBlanked = false;
+     setBluetoothEnable(false);
+     if (screen) {
+         screen->setOn(true);
++    }
++}
++
++static void serialIdle()
++{
++    // Never enter DARK here: the serial state also prevents CPU sleep and keeps
++    // USB servicing active. API heartbeats must not restart the display timer.
++    if (!screen || serialScreenBlanked || config.display.screen_on_secs == UINT32_MAX)
++        return;
++#ifdef USE_EINK
++    if (config.display.screen_on_secs == 0)
++        return;
++#endif
++    const uint32_t timeout = Default::getConfiguredOrDefaultMs(config.display.screen_on_secs, default_screen_on_secs);
++    if (static_cast<uint32_t>(millis() - serialScreenOnAt) >= timeout) {
++        screen->setOn(false);
++        serialScreenBlanked = true; // Queue the display command only once per wake.
+     }
+ }
+ 
+@@ -257,7 +280,7 @@
+ State stateLS(lsEnter, lsIdle, lsExit, "LS");
+ State stateNB(nbEnter, NULL, NULL, "NB");
+ State stateDARK(darkEnter, NULL, NULL, "DARK");
+-State stateSERIAL(serialEnter, NULL, serialExit, "SERIAL");
++State stateSERIAL(serialEnter, serialIdle, serialExit, "SERIAL");
+ State stateBOOT(bootEnter, NULL, NULL, "BOOT");
+ State stateON(onEnter, onIdle, NULL, "ON");
+ State statePOWER(powerEnter, powerIdle, powerExit, "POWER");
+@@ -313,6 +336,9 @@
+     powerFSM.add_transition(&stateON, &stateSHUTDOWN, EVENT_SHUTDOWN, NULL, "Shutdown");
+     powerFSM.add_transition(&stateSERIAL, &stateSHUTDOWN, EVENT_SHUTDOWN, NULL, "Shutdown");
+ 
++    // Local input wakes the screen without leaving serial mode.
++    powerFSM.add_transition(&stateSERIAL, &stateSERIAL, EVENT_INPUT, NULL, "Serial input");
++
+     // Inputbroker
+     powerFSM.add_transition(&stateLS, &stateON, EVENT_INPUT, NULL, "Input Device");
+     powerFSM.add_transition(&stateNB, &stateON, EVENT_INPUT, NULL, "Input Device");
+@@ -335,7 +361,7 @@
+         powerFSM.add_transition(&stateON, &stateON, EVENT_RECEIVED_MSG, NULL, "Received text"); // restarts the sleep timer
+     }
+ 
+-    // If we are not in statePOWER but get a serial connection, suppress sleep (and keep the screen on) while connected
++    // If we are not in statePOWER but get a serial connection, suppress CPU sleep while connected; the display has its own timeout
+     powerFSM.add_transition(&stateLS, &stateSERIAL, EVENT_SERIAL_CONNECTED, NULL, "serial API");
+     powerFSM.add_transition(&stateNB, &stateSERIAL, EVENT_SERIAL_CONNECTED, NULL, "serial API");
+     powerFSM.add_transition(&stateDARK, &stateSERIAL, EVENT_SERIAL_CONNECTED, NULL, "serial API");

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "imported_on": "2026-09-30",
+  "source_project": "MeshMemo source tree, firmware/upstream.json",
+  "firmware_commit": "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb",
+  "protobufs_commit": "6b1ded439633cd03d4af85b44231b91d1d106278",
+  "files": [
+    {
+      "path": "patches/optional/cyrillic.patch",
+      "source": "firmware/patches/0001-inherited-ua22-cyrillic-windows.patch",
+      "source_sha256": "f72d906e12483abd8686620e9e4e15ac433d977a3db9bbffb0d48cc90a5fdb7a",
+      "sha256": "8b38167ff3aa2b072ab7fb8ceda50e8702fba48a0d7910fc1a0abb4012b4d052",
+      "transformation": "Extract Screen.h UTF-8 correction; OLED_UA build flag selected separately"
+    },
+    {
+      "path": "patches/optional/ua22.patch",
+      "source": "firmware/patches/0001-inherited-ua22-cyrillic-windows.patch",
+      "source_sha256": "f72d906e12483abd8686620e9e4e15ac433d977a3db9bbffb0d48cc90a5fdb7a",
+      "sha256": "99ef8f38b59db280b1499c1dbda25df7f35af857c0da5ac3dbfc9d66c9d90ca1",
+      "transformation": "Extract UA_433 power ceiling only"
+    },
+    {
+      "path": "patches/platform/windows-build.patch",
+      "source": "firmware/patches/0001-inherited-ua22-cyrillic-windows.patch",
+      "source_sha256": "f72d906e12483abd8686620e9e4e15ac433d977a3db9bbffb0d48cc90a5fdb7a",
+      "sha256": "7d64daa5dfc03e57f5148789c57b6940ea33acb206d77093655db90c3d37f6e8",
+      "transformation": "Extract Windows build configuration and LTO script; no RF or OLED changes; Add the Heltec V3 Windows LTO workaround"
+    },
+    {
+      "path": "patches/core/0002-usb-diagnostics.patch",
+      "source": "firmware/patches/0002-usb-diagnostics.patch",
+      "source_sha256": "a39d12237b8a347cbe3973f23215d916e574f6fcff5e601c1910039dfded2be2",
+      "sha256": "f297495ffeeade61ac4fa14251a2c72d643eeecdb039c518ece741882be02ad8",
+      "transformation": "Remove board hunk depending on OLED_UA; builder adds bridge flag independently"
+    },
+    {
+      "path": "patches/core/0003-usb-replay.patch",
+      "source": "firmware/patches/0003-usb-replay.patch",
+      "source_sha256": "5981aaaacbf1eb1faf801e1f7720fbab55c4c0e13f0556751590286c79f13497",
+      "sha256": "5981aaaacbf1eb1faf801e1f7720fbab55c4c0e13f0556751590286c79f13497",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "patches/core/0006-server-channels.patch",
+      "source": "firmware/patches/0006-server-channels.patch",
+      "source_sha256": "3ed71d6f036e35019ebeaa3005c5809a1ebf67c99a027c4abcaecb80f87b285a",
+      "sha256": "3ed71d6f036e35019ebeaa3005c5809a1ebf67c99a027c4abcaecb80f87b285a",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "patches/core/0001-usb-sf-field.patch",
+      "source": "firmware/protocol/0001-usb-sf-field.patch",
+      "source_sha256": "4fa37dded21558e61ead946a57c546e22ab72cc27f24ebf3a8472bef0059a402",
+      "sha256": "4fa37dded21558e61ead946a57c546e22ab72cc27f24ebf3a8472bef0059a402",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "patches/platform/usb-poll.patch",
+      "source": "firmware/patches/0004-usb-poll.patch",
+      "source_sha256": "048cc26186afae851f73a1f4d732d1ad0a704627589ea9629cdeabb358c008b7",
+      "sha256": "048cc26186afae851f73a1f4d732d1ad0a704627589ea9629cdeabb358c008b7",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "patches/optional/display-timeout.patch",
+      "source": "firmware/patches/0005-usb-screen-timeout.patch",
+      "source_sha256": "799e3a14b2a07950fd47670f048aba475446cd222187d46b3d4c53121e0d560c",
+      "sha256": "799e3a14b2a07950fd47670f048aba475446cd222187d46b3d4c53121e0d560c",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "payloads/replay/UsbSfPayload.h",
+      "source": "firmware/replay/UsbSfPayload.h",
+      "source_sha256": "d0c9902dc020ea635ccd8de4c19c9b86b328b6a8701f8995953f53b265abc4ed",
+      "sha256": "d0c9902dc020ea635ccd8de4c19c9b86b328b6a8701f8995953f53b265abc4ed",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "payloads/replay/UsbSfRadio.cpp",
+      "source": "firmware/replay/UsbSfRadio.cpp",
+      "source_sha256": "76b0f12ccc661ae959f9c29a23c1b2e30ff3a4f1b438abb481af8b58fae06464",
+      "sha256": "e33e99293ad440d8f8df9985677796940e49086c4e415ee0bd8dd32cea15810b",
+      "transformation": "Normalize CRLF to LF for Git-stable checksums; code unchanged; Use the explicit ESP32 SHA-256 adapter; radio admission and payload semantics unchanged"
+    },
+    {
+      "path": "payloads/replay/UsbSfRadio.h",
+      "source": "firmware/replay/UsbSfRadio.h",
+      "source_sha256": "75c4b8ee604788227999081cde6c2e4c43bd867708081e8251201a7b125ac38c",
+      "sha256": "75c4b8ee604788227999081cde6c2e4c43bd867708081e8251201a7b125ac38c",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "tests/native/bridge_harness.cpp",
+      "source": "tests/native/bridge_harness.cpp",
+      "source_sha256": "f031e603460aa8085b5a9d72f325fbe99962d7401d6788cf439e99d2893df29f",
+      "sha256": "f031e603460aa8085b5a9d72f325fbe99962d7401d6788cf439e99d2893df29f",
+      "transformation": "unchanged"
+    },
+    {
+      "path": "patches/core/0007-portable-capabilities.patch",
+      "source": "MeshMemo Firmware Builder 0.1.0a2",
+      "sha256": "189eaad27d8c4f8699b2995a08ecaf254b069c93c42cd41bafaebc6afbbcfebe",
+      "transformation": "New portable capabilities and explicit platform/transport boundaries"
+    },
+    {
+      "path": "payloads/portable/UsbSfSha256.h",
+      "source": "MeshMemo Firmware Builder 0.1.0a2",
+      "sha256": "d90c0e0ab235d5ca31a6757165868b1ac2919156f5474b005ffe8a45b077e50a",
+      "transformation": "New portable capabilities and explicit platform/transport boundaries"
+    },
+    {
+      "path": "payloads/portable/UsbSfTransport.h",
+      "source": "MeshMemo Firmware Builder 0.1.0a2",
+      "sha256": "ad822ff5f9b22881bafad039744d52f082270b544bc660197c5a59a79fc9837b",
+      "transformation": "New portable capabilities and explicit platform/transport boundaries"
+    }
+  ]
+}

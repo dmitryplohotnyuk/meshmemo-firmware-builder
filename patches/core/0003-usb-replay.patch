@@ -1,0 +1,87 @@
+--- a/src/mesh/UsbSfBridge.h
++++ b/src/mesh/UsbSfBridge.h
+@@ -7,7 +7,8 @@
+ public:
+   static constexpr size_t RESPONSE_SIZE = 68;
+   void reset();
+-  void handle(const uint8_t *data, size_t size);
++  using Sender = uint8_t (*)(const uint8_t *, size_t);
++  void handle(const uint8_t *data, size_t size, Sender sender = nullptr);
+   bool available() const { return pending; }
+   void takeReply(uint8_t *out);
+ 
+@@ -19,5 +20,6 @@
+   uint8_t lastReply[RESPONSE_SIZE] = {};
+   uint8_t reply[RESPONSE_SIZE] = {};
+   bool pending = false;
++  bool replayProfile = false;
+   void respond(const uint8_t *request, uint8_t status);
+ };
+--- a/src/mesh/UsbSfBridge.cpp
++++ b/src/mesh/UsbSfBridge.cpp
+@@ -24,11 +24,17 @@
+   // exists.
+   reply[19] = 1;
+   reply[20] = 12;
++  if (replayProfile) {
++    reply[16] = 192;
++    reply[18] = 1;
++    reply[19] = 2;
++  }
+   memcpy(reply + 28, "54e0d8d0ab2ff56b3a9ce967e53f79e49af560fb", 40);
+   pending = true;
+ }
+ 
+-void UsbSfBridge::handle(const uint8_t *data, size_t size) {
++void UsbSfBridge::handle(const uint8_t *data, size_t size, Sender sender) {
++  replayProfile = sender != nullptr;
+   if (pending || size < 16 || size > sizeof(lastRequest) ||
+       memcmp(data, "USF1", 4) || (data[4] & 0x80))
+     return;
+@@ -62,9 +68,22 @@
+   uint8_t status = 2;
+   if (data[4] == 1 || data[4] == 3)
+     status = size == 16 ? 0 : 1;
+-  else if (data[4] == 2)
+-    status =
+-        7; // Replay stays disabled until encrypted packet identity is resolved.
++  else if (data[4] == 2) {
++    status = 7;
++    if (sender) {
++      status = 1;
++      if (size > 60 && size <= 252 && read32(data + 16) && read32(data + 20) &&
++          read32(data + 24) && read32(data + 16) != UINT32_MAX &&
++          read32(data + 24) != UINT32_MAX && read32(data + 16) != read32(data + 24) &&
++          read32(data + 28) < 8 && read32(data + 36) <= 1 && read32(data + 40) &&
++          read32(data + 40) != read32(data + 20))
++        status = sender(data, size);
++    }
++  } else if (data[4] == 4 && sender) {
++    status = 1;
++    if (size > 44 && size <= 144 && read32(data + 16) && read32(data + 20) < 8 && read32(data + 24))
++      status = sender(data, size);
++  }
+   respond(data, status);
+   token = incomingToken;
+   lastSize = size;
+--- a/src/mesh/PhoneAPI.cpp
++++ b/src/mesh/PhoneAPI.cpp
+@@ -10,6 +10,9 @@
+ #include "NodeDB.h"
+ #include "PacketHistory.h"
+ #include "PhoneAPI.h"
++#ifdef MESHTASTIC_USB_SF_BRIDGE
++#include "UsbSfRadio.h"
++#endif
+ #include "PowerFSM.h"
+ #include "RadioInterface.h"
+ #include "Router.h"
+@@ -189,7 +192,7 @@
+ #ifdef MESHTASTIC_USB_SF_BRIDGE
+         case meshtastic_ToRadio_usb_sf_tag:
+             if (supportsUsbSfBridge() && state == STATE_SEND_PACKETS)
+-                usbSfBridge.handle(toRadioScratch.usb_sf.bytes, toRadioScratch.usb_sf.size);
++                usbSfBridge.handle(toRadioScratch.usb_sf.bytes, toRadioScratch.usb_sf.size, usbSfSend);
+             break;
+ #endif
+         case meshtastic_ToRadio_packet_tag:
